@@ -27,13 +27,32 @@ body {
 }
 
 @keyframes dots {
-  0%, 20% { content: "."; }
-  40% { content: ".."; }
-  60% { content: "..."; }
-  80%, 100% { content: ""; }
+
+  0%,
+  20% {
+    content: ".";
+  }
+
+  40% {
+    content: "..";
+  }
+
+  60% {
+    content: "...";
+  }
+
+  80%,
+  100% {
+    content: "";
+  }
 }
 
 .loading-dots::after {
   content: "";
   animation: dots 3s infinite;
+}
+
+::view-transition-old(settings-expand),
+::view-transition-new(settings-expand) {
+  height: 100%;
 }
