@@ -42,7 +42,7 @@ export default function LoginForm() {
     }
 
     return (
-        <div className="flex justify-center items-center dark:bg-[#232323] bg-white p-16 rounded-xl text-white border dark:border-[#303030] border-zinc-100 shadow-lg ">
+        <div className="flex justify-center items-center  p-16 rounded-xl text-white">
             <form onSubmit={handleLogin} className='flex flex-col gap-5'>
                 <label htmlFor="username">Usuario</label>
                 <input type="text" name="username" className={`p-2 rounded-xl bg-zinc-100 dark:bg-[#2A2A2A] `} onChange={(e) => setUsername(e.target.value)} />
