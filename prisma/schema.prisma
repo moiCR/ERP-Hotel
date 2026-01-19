@@ -1,25 +1,125 @@
-
 generator client {
-  provider = "prisma-client"
-  output   = "../lib/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-model Role{
-  id Int @id @default(autoincrement())
-  name String @unique
 
-  users User[]
+model Sede {
+  id          Int      @id @default(autoincrement())
+  ciudad      String
+  direccion   String
+  central     Boolean  @default(false)
+  
+  usuarios    Usuario[]
+  modulos     Modulo[]
+  habitaciones Habitacion[]
 }
 
-model User{
-  id Int @id @default(autoincrement())
-  name String
-  email String @unique
-  password String
-  role Role @relation(fields: [roleId], references: [id])
-  roleId Int
+model Modulo {
+  id      Int      @id @default(autoincrement())
+  nombre  String   @unique
+  sede    Sede     @relation(fields: [idSede], references: [id])
+  idSede  Int
+  
+  permisos PermisoRol[]
+}
+
+
+model Rol {
+  id       Int      @id @default(autoincrement())
+  nombre   String   @unique
+  usuarios Usuario[]
+  permisos PermisoRol[]
+}
+
+model PermisoRol {
+  id        Int     @id @default(autoincrement())
+  rol       Rol     @relation(fields: [idRol], references: [id])
+  idRol     Int
+  modulo    Modulo  @relation(fields: [idModulo], references: [id])
+  idModulo  Int
+  lectura   Boolean @default(false)
+  escritura Boolean @default(false)
+}
+
+model Usuario {
+  id                  Int       @id @default(autoincrement())
+  nombre              String
+  apellidos           String
+  estado              Boolean   @default(true)
+  contrasena          String    // Encriptada
+  intentosFallidos    Int       @default(0)
+  rol                 Rol       @relation(fields: [idRol], references: [id])
+  idRol               Int
+  sede                Sede      @relation(fields: [idSede], references: [id])
+  idSede              Int
+  
+  bitacoras           Bitacora[]
+  reservasRealizadas  Reserva[]
+}
+
+model Bitacora {
+  id           Int      @id @default(autoincrement())
+  usuario      Usuario  @relation(fields: [idUsuario], references: [id])
+  idUsuario    Int
+  fechaIngreso DateTime @default(now())
+  fechaSalida  DateTime?
+}
+
+
+model CategoriaHabitacion {
+  id             Int          @id @default(autoincrement())
+  nombreCategoria String
+  habitaciones   Habitacion[]
+}
+
+model Habitacion {
+  id            Int                 @id @default(autoincrement())
+  piso          Int
+  estado        String              // Ej: Disponible, Limpieza, Ocupada
+  sede          Sede                @relation(fields: [idSede], references: [id])
+  idSede        Int
+  categoria     CategoriaHabitacion @relation(fields: [idCategoria], references: [id])
+  idCategoria   Int
+  
+  reservas      Reserva[]
+}
+
+model Cliente {
+  id        Int       @id @default(autoincrement())
+  nombre    String
+  apellidos String
+  cedula    String    @unique
+  
+  reservas  Reserva[]
+}
+
+model Reserva {
+  id           Int        @id @default(autoincrement())
+  usuario      Usuario    @relation(fields: [idUsuario], references: [id])
+  idUsuario    Int
+  habitacion   Habitacion @relation(fields: [idHabitacion], references: [id])
+  idHabitacion Int
+  cliente      Cliente    @relation(fields: [idCliente], references: [id])
+  idCliente    Int
+  
+  fechaReserva DateTime   @default(now())
+  fechaInicio  DateTime
+  fechaSalida  DateTime
+  
+  facturas     Factura[]
+}
+
+model Factura {
+  id           Int      @id @default(autoincrement())
+  reserva      Reserva  @relation(fields: [idReserva], references: [id])
+  idReserva    Int
+  totalIva     Float
+  tipoCambio   Float
+  montoDolares Float
+  montoTarjeta Float
+  vuelto       Float
 }
