@@ -1,5 +1,5 @@
 "use client";
-import { auth } from "@/lib/db";
+import { auth } from "@/actions/auth";
 import { useState } from "react";
 
 export default function LoginForm() {
@@ -26,6 +26,7 @@ export default function LoginForm() {
         }
 
         setLoading(true);
+        setError('');
         const result = await auth(username, password);
 
         if (result.success) {
@@ -34,10 +35,6 @@ export default function LoginForm() {
         } else {
             setLoading(false);
             setError(result.message);
-
-            setTimeout(() => {
-                setError('');
-            }, 5000);
         }
     }
 
@@ -58,13 +55,13 @@ export default function LoginForm() {
                 </section>
 
                 <section className="flex flex-col gap-2">
-                    <label htmlFor="username">Usuario</label>
-                    <input type="text" name="username" className={`p-2 rounded-xl bg-zinc-100 dark:bg-[#2A2A2A] dark:text-zinc-200 `} onChange={(e) => setUsername(e.target.value)} />
+                    <label htmlFor="email">Correo electrónico</label>
+                    <input required type="text" name="email" className={`p-2 rounded-xl bg-zinc-100 dark:bg-[#2A2A2A] dark:text-zinc-200 `} onChange={(e) => setUsername(e.target.value)} />
                 </section>
 
                 <section className="flex flex-col gap-2">
                     <label htmlFor="password">Contraseña</label>
-                    <input type="password" name="password" className='p-2 rounded-xl bg-zinc-100 dark:bg-[#2A2A2A] dark:text-zinc-200' onChange={(e) => setPassword(e.target.value)} />
+                    <input required type="password" name="password" className='p-2 rounded-xl bg-zinc-100 dark:bg-[#2A2A2A] dark:text-zinc-200' onChange={(e) => setPassword(e.target.value)} />
                 </section>
 
                 <section className="flex items-center gap-2">
@@ -72,15 +69,17 @@ export default function LoginForm() {
                     <label htmlFor="remember">Recuerdame</label>
                 </section>
 
-                <button
-                    id='login-button'
-                    className={`${isLoading ? 'animate-pulse bg-green-500 hover:bg-green-400' : 'bg-blue-700 border-2 border-blue-800 hover:bg-blue-600'} 
+                <section className="flex flex-col gap-2">
+                    <button
+                        id='login-button'
+                        className={`${isLoading ? 'animate-pulse bg-green-500 hover:bg-green-400' : 'bg-blue-700 border-2 border-blue-800 hover:bg-blue-600'} 
                                 text-white p-3 rounded-xl hover:scale-101 transition-all duration-300`}
-                    type="submit">
-                    {isLoading ? 'Iniciando sesión' : 'Iniciar sesión'}
-                    {isLoading && <span className="loading-dots"></span>}
-                </button>
-                {error && <p className="text-red-500 text-sm">{error}</p>}
+                        type="submit">
+                        {isLoading ? 'Iniciando sesión' : 'Iniciar sesión'}
+                        {isLoading && <span className="loading-dots"></span>}
+                    </button>
+                    {error && <p className="text-red-500 text-sm text-center">{error}</p>}  
+                </section>
             </form>
         </div>
     )

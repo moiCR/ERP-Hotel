@@ -1,18 +1,20 @@
-"use server";
-import { pool } from "@/actions/auth";
+import { Pool } from "pg";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@prisma/client";
 
-export async function auth(username: string, password: string){
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+const connectionString = `${process.env.DATABASE_URL}`;
 
-    try{
-        const [rows] = await pool.query(
-            "SELECT * FROM users WHERE username = ? AND password = ?",
-            [username, password]
-        );
+const pool = new Pool({ connectionString });
+const adapter = new PrismaPg(pool);
 
-        return {success: true, message: "Login exitoso!."}
-    }catch(error){
-        console.log(error);
-        return {success: false, message: "La contraseña o el usuario no son correctos"}
-    }
+const prismaClientSingleton = () => {
+    return new PrismaClient({ adapter });
+};
+
+declare global {
+    var prisma: undefined | ReturnType<typeof prismaClientSingleton>;
 }
+
+export const db = globalThis.prisma ?? prismaClientSingleton();
+
+if (process.env.NODE_ENV !== "production") globalThis.prisma = db;

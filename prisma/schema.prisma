@@ -6,31 +6,29 @@ datasource db {
   provider = "postgresql"
 }
 
-
 model Sede {
-  id          Int      @id @default(autoincrement())
-  ciudad      String
-  direccion   String
-  central     Boolean  @default(false)
-  
-  usuarios    Usuario[]
-  modulos     Modulo[]
+  id        Int     @id @default(autoincrement())
+  ciudad    String
+  direccion String
+  central   Boolean @default(false)
+
+  usuarios     Usuario[]
+  modulos      Modulo[]
   habitaciones Habitacion[]
 }
 
 model Modulo {
-  id      Int      @id @default(autoincrement())
-  nombre  String   @unique
-  sede    Sede     @relation(fields: [idSede], references: [id])
-  idSede  Int
-  
+  id     Int    @id @default(autoincrement())
+  nombre String @unique
+  sede   Sede   @relation(fields: [idSede], references: [id])
+  idSede Int
+
   permisos PermisoRol[]
 }
 
-
 model Rol {
-  id       Int      @id @default(autoincrement())
-  nombre   String   @unique
+  id       Int          @id @default(autoincrement())
+  nombre   String       @unique
   usuarios Usuario[]
   permisos PermisoRol[]
 }
@@ -46,55 +44,55 @@ model PermisoRol {
 }
 
 model Usuario {
-  id                  Int       @id @default(autoincrement())
-  nombre              String
-  apellidos           String
-  estado              Boolean   @default(true)
-  contrasena          String    // Encriptada
-  intentosFallidos    Int       @default(0)
-  rol                 Rol       @relation(fields: [idRol], references: [id])
-  idRol               Int
-  sede                Sede      @relation(fields: [idSede], references: [id])
-  idSede              Int
-  
-  bitacoras           Bitacora[]
-  reservasRealizadas  Reserva[]
+  id               Int     @id @default(autoincrement())
+  nombre           String
+  email            String  @unique
+  apellidos        String
+  estado           Boolean @default(true)
+  contrasena       String // Encriptada
+  intentosFallidos Int     @default(0)
+  rol              Rol     @relation(fields: [idRol], references: [id])
+  idRol            Int
+  sede             Sede    @relation(fields: [idSede], references: [id])
+  idSede           Int
+
+  bitacoras          Bitacora[]
+  reservasRealizadas Reserva[]
 }
 
 model Bitacora {
-  id           Int      @id @default(autoincrement())
-  usuario      Usuario  @relation(fields: [idUsuario], references: [id])
+  id           Int       @id @default(autoincrement())
+  usuario      Usuario   @relation(fields: [idUsuario], references: [id])
   idUsuario    Int
-  fechaIngreso DateTime @default(now())
+  fechaIngreso DateTime  @default(now())
   fechaSalida  DateTime?
 }
 
-
 model CategoriaHabitacion {
-  id             Int          @id @default(autoincrement())
+  id              Int          @id @default(autoincrement())
   nombreCategoria String
-  habitaciones   Habitacion[]
+  habitaciones    Habitacion[]
 }
 
 model Habitacion {
-  id            Int                 @id @default(autoincrement())
-  piso          Int
-  estado        String              // Ej: Disponible, Limpieza, Ocupada
-  sede          Sede                @relation(fields: [idSede], references: [id])
-  idSede        Int
-  categoria     CategoriaHabitacion @relation(fields: [idCategoria], references: [id])
-  idCategoria   Int
-  
-  reservas      Reserva[]
+  id          Int                 @id @default(autoincrement())
+  piso        Int
+  estado      String // Ej: Disponible, Limpieza, Ocupada
+  sede        Sede                @relation(fields: [idSede], references: [id])
+  idSede      Int
+  categoria   CategoriaHabitacion @relation(fields: [idCategoria], references: [id])
+  idCategoria Int
+
+  reservas Reserva[]
 }
 
 model Cliente {
-  id        Int       @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   nombre    String
   apellidos String
-  cedula    String    @unique
-  
-  reservas  Reserva[]
+  cedula    String @unique
+
+  reservas Reserva[]
 }
 
 model Reserva {
@@ -105,17 +103,17 @@ model Reserva {
   idHabitacion Int
   cliente      Cliente    @relation(fields: [idCliente], references: [id])
   idCliente    Int
-  
-  fechaReserva DateTime   @default(now())
+
+  fechaReserva DateTime @default(now())
   fechaInicio  DateTime
   fechaSalida  DateTime
-  
-  facturas     Factura[]
+
+  facturas Factura[]
 }
 
 model Factura {
-  id           Int      @id @default(autoincrement())
-  reserva      Reserva  @relation(fields: [idReserva], references: [id])
+  id           Int     @id @default(autoincrement())
+  reserva      Reserva @relation(fields: [idReserva], references: [id])
   idReserva    Int
   totalIva     Float
   tipoCambio   Float
