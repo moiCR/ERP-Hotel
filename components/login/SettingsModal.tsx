@@ -4,10 +4,10 @@ import Switch from "../Switch";
 
 export default function SettingsModal({ onClose }: { onClose: () => void }) {
     return (
-        <div className="fixed inset-0 z-50 pointer-events-none text" onClick={onClose}>
+        <div className="fixed inset-0 z-50 pointer-events-none" onClick={onClose}>
             <dialog
                 id="settingsModal"
-                className="absolute bottom-4 left-4 flex flex-row p-5 gap-4 rounded-xl bg-zinc-50 dark:bg-[#2A2A2A] shadow-xl m-0 pointer-events-auto"
+                className="absolute bottom-4 right-4 left-auto flex flex-row p-5 gap-4 rounded-xl bg-zinc-50 dark:bg-[#2A2A2A] shadow-xl m-0 pointer-events-auto border-none"
                 open
                 onClick={(e) => e.stopPropagation()}
                 style={{ viewTransitionName: 'settings-expand' } as React.CSSProperties}
@@ -24,7 +24,6 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
                         <Switch checked={true} onChange={(checked) => { console.log(checked) }} />
                     </div>
                 </div>
-
             </dialog>
         </div>
     )
