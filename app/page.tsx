@@ -28,7 +28,7 @@ export default function Home() {
 
 
   return (
-    <div className="flex flex-col min-h-screen justify-between bg-zinc-50 font-sans dark:bg-[#191919]">
+    <div className="flex flex-col min-h-screen justify-between bg-white font-sans dark:bg-[#1F1F1F]">
       <header className="absolute top-0 left-0 w-full">
         <div className="flex justify-end">
           <Image
@@ -48,7 +48,7 @@ export default function Home() {
             alt="Imagen de una habitacion de hotel"
             width={1280}
             height={720}
-            className="object h-[calc(100vh-64px)] rounded-3xl"
+            className="object h-[calc(100vh-64px)] rounded-3xl dark:bg-[#191919]"
           />
         </section>
         <section className="flex p-4 justify-center w-screen h-screen flex-col items-center py-32 px-16 bg-white dark:bg-[#191919]">

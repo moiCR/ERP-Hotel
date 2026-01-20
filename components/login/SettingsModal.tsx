@@ -1,13 +1,23 @@
 "use client";
 
-import Switch from "../Switch";
+import { Switch } from "@/components/ui/switch"
+import { useTheme } from "next-themes"
+import { changeTheme } from "@/actions/theme";
 
 export default function SettingsModal({ onClose }: { onClose: () => void }) {
+    const { setTheme, resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === 'dark';
+
+    const handleThemeChange = async (theme: "light" | "dark") => {
+        await changeTheme(theme);
+        setTheme(theme);
+    };
+
     return (
         <div className="fixed inset-0 z-50 pointer-events-none" onClick={onClose}>
             <dialog
                 id="settingsModal"
-                className="absolute bottom-4 right-4 left-auto flex flex-row p-5 gap-4 rounded-xl bg-zinc-50 dark:bg-[#2A2A2A] shadow-xl m-0 pointer-events-auto border-none"
+                className="absolute bottom-4 right-4 left-auto flex flex-row p-5 gap-4 rounded-xl bg-zinc-100 dark:bg-[#2A2A2A] border-zinc-200 dark:border-zinc-800 shadow-xl m-0 pointer-events-auto border-none"
                 open
                 onClick={(e) => e.stopPropagation()}
                 style={{ viewTransitionName: 'settings-expand' } as React.CSSProperties}
@@ -20,8 +30,12 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
                         </svg>
                     </button>
                     <div className="flex items-center gap-4">
-                        <span className="text-black dark:text-white/80">Dark Mode</span>
-                        <Switch checked={true} onChange={(checked) => { console.log(checked) }} />
+                        <span className="text-black dark:text-white/80 font-medium">Dark Mode</span>
+                        <Switch
+                            checked={isDark}
+                            onCheckedChange={(checked) => handleThemeChange(checked ? 'dark' : 'light')}
+                            className="bg-zinc-800 dark:bg-zinc-200 transition-colors duration-1000"
+                        />
                     </div>
                 </div>
             </dialog>
