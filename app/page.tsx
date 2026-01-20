@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import LoginForm from "@/components/login/LoginForm";
-import SettingsButton from "@/components/login/SettingsButton";
-import SettingsModal from "@/components/login/SettingsModal";
+import LoginForm from "@/components/login/login-form";
+import SettingsButton from "@/components/login/settings-button";
+import SettingsModal from "@/components/login/settings-modal";
 import Image from 'next/image'
 import BackgroundLogin from '@/public/background_login.webp'
 import Logo from '@/public/logo.webp'
