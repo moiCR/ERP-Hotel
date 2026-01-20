@@ -92,7 +92,7 @@ return (
                         className={`${isLoading ? 'bg-green-600 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-600'} 
                                 text-white p-3 rounded-xl transition-all duration-300 active:scale-95`}
                         type="submit">
-                        {isLoading ? 'The process is running' : 'Iniciar sesión'}
+                        {isLoading ? 'Iniciando sesión' : 'Iniciar sesión'}
                         {isLoading && <span className="loading-dots"></span>}
                     </button>
                     {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}  

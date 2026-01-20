@@ -1,12 +1,12 @@
 "use server";
 import { db } from "@/lib/db";
 
-export async function auth(user: string, password: string) {
+export async function auth(email: string, password: string) {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     try {
         const usuario = await db.usuario.findUnique({
-            where: { email: user },
+            where: { email: email },
             include: { rol: true }
         });
 
