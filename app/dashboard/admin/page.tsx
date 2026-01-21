@@ -1,11 +1,11 @@
 
 import { Suspense } from "react";
-import { StatsGrid } from "./components/stats-grid";
+import { StatsGrid } from "../../../components/dashboard/admin/stats-grid";
 import { BentoGridSkeleton } from "@/components/bento-grid";
 
 export default function HomePage() {
     return (
-        <div className="p-8 w-full h-full z-0">
+        <div className="">
 
             <div className="mb-6">
                 <h1 className="text-3xl font-bold dark:text-white">Panel Administrativo</h1>

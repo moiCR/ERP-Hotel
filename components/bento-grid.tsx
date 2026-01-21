@@ -62,7 +62,6 @@ export const BentoItem = ({
 export const BentoGridSkeleton = () => {
     return (
         <div className="grid lg:grid-cols-2 grid-cols-1 gap-6 max-w-full mx-0">
-            {/* Item 1 Skeleton */}
             <div className="col-span-1 min-h-[200px] h-full rounded-xl bg-gray-100 dark:bg-zinc-900 overflow-hidden animate-pulse border border-transparent dark:border-zinc-800 p-4 flex flex-col justify-between">
                 <div className="flex flex-1 w-full h-full min-h-24 rounded-xl bg-gray-200 dark:bg-zinc-800" />
                 <div className="flex flex-col gap-2 mt-4">

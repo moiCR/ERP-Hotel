@@ -19,7 +19,7 @@ export default function AdminLayout({
                 </SideBar>
             </section>
 
-            <section className="w-full h-full">
+            <section className="w-full h-full p-8 z-0">
                 {children}
             </section>
         </main>
