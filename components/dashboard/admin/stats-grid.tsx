@@ -25,24 +25,23 @@ export async function StatsGrid() {
     return (
         <BentoGrid className="lg:grid-cols-2 max-w-full mx-0 gap-6">
 
-            {/* --- ITEM 1 --- */}
+
             <BentoItem
                 title="Usuarios Totales"
                 description="Usuarios registrados y activos"
-                className="col-span-1 min-h-[200px] dark:bg-[#1F1F1F]"
+                className="col-span-1 min-h-[200px] dark:bg-[#1F1F1F] bg-gray-100"
                 header={
-                    <div className="flex flex-col items-center justify-center w-full h-full text-black  dark:text-white ">
+                    <div className="flex flex-col items-center justify-center w-full h-full text-black   dark:text-white ">
                         <span className="text-7xl font-bold">{totalUsuarios}</span>
                     </div>
                 }
                 icon={<Users className="h-5 w-5 text-neutral-500" />}
             />
 
-            {/* --- ITEM 2 --- */}
             <BentoItem
                 title="Sedes Operativas"
                 description="Total de sucursales registradas"
-                className="col-span-1 min-h-[300px] dark:bg-[#1F1F1F]"
+                className="col-span-1 min-h-[300px] dark:bg-[#1F1F1F] bg-gray-100"
                 header={
                     <div className="flex flex-col items-center justify-center w-full h-full text-zinc-800 dark:text-zinc-100">
                         <span className="text-7xl font-bold">{totalSedes}</span>
@@ -55,7 +54,7 @@ export async function StatsGrid() {
                 title="Últimos Accesos"
                 description="Registro de actividad reciente"
                 icon={<History className="h-5 w-5 text-neutral-500" />}
-                className="col-span-1 lg:col-span-2 h-[420px] dark:bg-[#1F1F1F] bg-white "
+                className="col-span-1 lg:col-span-2 h-[420px] dark:bg-[#1F1F1F] bg-gray-100 "
                 header={
                     <div className="w-full h-full p-2 overflow-hidden">
                         <table className="w-full text-sm text-left text-zinc-600 dark:text-zinc-300 ">

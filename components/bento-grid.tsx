@@ -35,7 +35,7 @@ export const BentoItem = ({
     return (
         <div
             className={cn(
-                "row-span-1 hover:scale-y-105 hover:scale-x-102 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4 dark:bg-zinc-900 bg-white border border-transparent justify-between flex flex-col space-y-4 dark:border-zinc-800",
+                "row-span-1 hover:scale-y-105 hover:scale-x-102 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-input dark:shadow-none p-4 bg-gray-50 dark:bg-zinc-900 border border-transparent justify-between flex flex-col space-y-4 dark:border-zinc-800",
                 className
             )}
         >
@@ -71,7 +71,6 @@ export const BentoGridSkeleton = () => {
                 </div>
             </div>
 
-            {/* Item 2 Skeleton */}
             <div className="col-span-1 min-h-[300px] h-full rounded-xl bg-gray-100 dark:bg-zinc-900 overflow-hidden animate-pulse border border-transparent dark:border-zinc-800 p-4 flex flex-col justify-between">
                 <div className="flex flex-1 w-full h-full min-h-24 rounded-xl bg-gray-200 dark:bg-zinc-800" />
                 <div className="flex flex-col gap-2 mt-4">
@@ -81,7 +80,6 @@ export const BentoGridSkeleton = () => {
                 </div>
             </div>
 
-            {/* Item 3 Skeleton */}
             <div className="col-span-1 lg:col-span-2 h-[420px] rounded-xl bg-gray-100 dark:bg-zinc-900 overflow-hidden animate-pulse border border-transparent dark:border-zinc-800 p-4 flex flex-col justify-between">
                 <div className="flex flex-1 w-full h-full rounded-xl bg-gray-200 dark:bg-zinc-800" />
                 <div className="flex flex-col gap-2 mt-4">
