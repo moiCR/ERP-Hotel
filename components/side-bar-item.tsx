@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 export default function SideBarItem({ name, isActive, href }: { name: string, isActive: boolean, href: string }) {
-    
     return (
         <div className="flex flex-col gap-2 justify-center w-full">
             <Link href={href} 

@@ -77,7 +77,7 @@ model CategoriaHabitacion {
 model Habitacion {
   id          Int                 @id @default(autoincrement())
   piso        Int
-  estado      String // Ej: Disponible, Limpieza, Ocupada
+  estado      String
   sede        Sede                @relation(fields: [idSede], references: [id])
   idSede      Int
   categoria   CategoriaHabitacion @relation(fields: [idCategoria], references: [id])

@@ -25,7 +25,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const theme = cookieStore.get("theme")?.value || "light"; // 'light' por defecto
+  const theme = cookieStore.get("theme")?.value || "dark";
   return (
     <html lang="es" suppressHydrationWarning>
       <body

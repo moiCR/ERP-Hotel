@@ -10,7 +10,7 @@ export default function LoginForm() {
     const [password, setPassword] = useState('');
     const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    
+    const [remember, setRemember] = useState(false);
 
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -21,7 +21,7 @@ export default function LoginForm() {
         setError('');
 
         try {
-            const result = await auth(email, password);
+            const result = await auth(email, password, remember);
             if (result.success && result.targetPath) {
                 router.push(result.targetPath);
             } else {
@@ -54,10 +54,14 @@ export default function LoginForm() {
                     <label htmlFor="email">Correo electrónico</label>
                     <input
                         required
-                        type="text"
+                        type="email"
                         name="email"
+                        value={email}
                         className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-transparent focus:border-blue-500 outline-none transition-colors duration-100"
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => {
+                            const cleanValue = e.target.value.replace(/[^a-zA-Z0-9@._-]/g, "");
+                            setEmail(cleanValue);
+                        }}
                     />
                 </section>
 
@@ -77,7 +81,7 @@ export default function LoginForm() {
                         id="remember"
                         className="w-5 h-5 accent-blue-700 cursor-pointer"
                         type="checkbox"
-                        onChange={(e) => console.log(e.target.checked)}
+                        onChange={(e) => setRemember(e.target.checked)}
                     />
                     <label htmlFor="remember" className="text-zinc-500 dark:text-zinc-400">Recuérdame</label>
                 </section>

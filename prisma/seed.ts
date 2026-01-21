@@ -2,7 +2,6 @@ import { db } from "../lib/db";
 import * as bcrypt from "bcryptjs";
 
 async function main() {
-
     const salt = await bcrypt.genSalt(10);
     const hashedAdminPassword = await bcrypt.hash("admin123", salt)
 

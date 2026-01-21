@@ -1,17 +1,12 @@
 "use client";
 
 import { Switch } from "@/components/ui/switch"
-import { useTheme } from "next-themes"
-import { changeTheme } from "@/actions/theme";
+import { useThemeTransition } from "@/hooks/theme-hook";
 
 export default function SettingsModal({ onClose }: { onClose: () => void }) {
-    const { setTheme, resolvedTheme } = useTheme();
-    const isDark = resolvedTheme === 'dark';
+    const { toggleTheme, isDark, mounted } = useThemeTransition();
 
-    const handleThemeChange = async (theme: "light" | "dark") => {
-        await changeTheme(theme);
-        setTheme(theme);
-    };
+    if (!mounted) return null;
 
     return (
         <div className="fixed inset-0 z-50 pointer-events-none" onClick={onClose}>
@@ -30,11 +25,11 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
                         </svg>
                     </button>
                     <div className="flex items-center gap-4">
-                        <span className="text-black dark:text-white/80 font-medium">Dark Mode</span>
+                        <span className="text-black dark:text-white/80 font-medium">Modo Oscuro</span>
                         <Switch
                             checked={isDark}
-                            onCheckedChange={(checked) => handleThemeChange(checked ? 'dark' : 'light')}
-                            className="bg-zinc-800 dark:bg-zinc-200 transition-colors duration-1000"
+                            onClick={(e) => toggleTheme(e)}
+                            className="bg-zinc-800 dark:bg-zinc-200"
                         />
                     </div>
                 </div>
