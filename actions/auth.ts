@@ -16,11 +16,33 @@ export async function auth(email: string, password: string, remember: boolean) {
             include: { rol: true }
         });
 
-        if (!usuario || !bcrypt.compareSync(password, usuario.contrasena)) {
-            return { success: false, message: "La contraseña o el usuario no son correctos" };
+        if (!usuario) {
+            return { success: false, message: "El usuario no existe" };
         }
+
+
         if (!usuario.estado) {
             return { success: false, message: "Este usuario está inhabilitado" };
+        }
+
+        if (!bcrypt.compareSync(password, usuario.contrasena)) {
+            if (usuario.intentosFallidos >= 3) {
+                await db.usuario.update({
+                    where: { id: usuario.id },
+                    data: {
+                        estado: false
+                    }
+                });
+                return { success: false, message: "Este usuario ha sido bloqueado por seguridad. Contacte a un administrador." };
+            }
+
+            await db.usuario.update({
+                where: { id: usuario.id },
+                data: {
+                    intentosFallidos: usuario.intentosFallidos + 1
+                }
+            });
+            return { success: false, message: "La contraseña o el usuario es incorrecto." };
         }
 
         const expirationTime = remember ? "30d" : "2h";

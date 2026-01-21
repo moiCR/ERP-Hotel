@@ -1,4 +1,3 @@
-// proxy.ts
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { jwtVerify } from "jose";
@@ -9,9 +8,10 @@ export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const session = request.cookies.get("session")?.value;
 
-    if (pathname === "/" || pathname.startsWith("/_next") || pathname.includes("/api/")) {
+    if (pathname.startsWith("/_next") || pathname.includes("/api/")) {
         return NextResponse.next();
     }
+
     if (!session) {
         if (pathname.startsWith("/dashboard")) {
             return NextResponse.redirect(new URL("/", request.url));
@@ -23,8 +23,13 @@ export async function proxy(request: NextRequest) {
         const { payload } = await jwtVerify(session, SECRET_KEY);
         const userRole = payload.rol as string;
         
+        if (pathname === "/") {
+            const dashboardPath = userRole === "Administrador" ? "/dashboard/admin" : "/";
+            return NextResponse.redirect(new URL(dashboardPath, request.url));
+        }
+
         if (pathname.startsWith("/dashboard/admin") && userRole !== "Administrador") {
-            return NextResponse.redirect(new URL("/dashboard", request.url));
+            return NextResponse.redirect(new URL("/", request.url));
         }
 
         return NextResponse.next();
