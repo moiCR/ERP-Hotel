@@ -2,14 +2,12 @@
 import { logout } from "@/actions/auth";
 import { useThemeTransition } from "@/hooks/theme-hook";
 import { Switch } from "@/components/ui/switch"
-import { useState } from "react";
 
 export default function SideBar({ header, children }: { header: string; children: React.ReactNode }) {
-    const { toggleTheme, isDark, mounted } = useThemeTransition();
-    const [theme, setTheme] = useState(isDark ? "dark" : "light");
+    const { toggleTheme, isDark } = useThemeTransition();
 
     return (
-        <aside className="relative flex flex-col gap-2 h-screen w-64 border-r-2 p-2
+        <aside className="relative flex flex-col gap-2 h-screen  border-r-2 p-2 w-56
             bg-zinc-100 border-zinc-200
             dark:bg-[#121212] dark:border-[#444444] justify-between
             ">
@@ -80,3 +78,4 @@ function MoonIcon() {
         </>
     )
 }
+

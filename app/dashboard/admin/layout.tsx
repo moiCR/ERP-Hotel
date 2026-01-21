@@ -11,17 +11,17 @@ export default function AdminLayout({
     const pathname = usePathname();
 
     return (
-        <>
+        <main className="flex flex-row w-full h-full">
             <section>
                 <SideBar header="Admin" >
                     <SideBarItem name="Inicio" isActive={pathname === "/dashboard/admin"} href="/dashboard/admin" />
                     <SideBarItem name="Usuarios" isActive={pathname === "/dashboard/admin/users"} href="/dashboard/admin/users" />
                 </SideBar>
             </section>
-            
-            <section>
+
+            <section className="w-full h-full">
                 {children}
             </section>
-        </>
+        </main>
     )
 }
