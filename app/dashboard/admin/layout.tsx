@@ -15,10 +15,7 @@ export default function AdminLayout({
             <section>
                 <SideBar header="Admin" >
                     <SideBarItem name="Inicio" isActive={pathname === "/dashboard/admin"} href="/dashboard/admin" />
-                    <SideBarItem name="Roles" isActive={pathname === "/dashboard/admin/roles"} href="/dashboard/admin/roles" />
                     <SideBarItem name="Usuarios" isActive={pathname === "/dashboard/admin/users"} href="/dashboard/admin/users" />
-                    <SideBarItem name="Habitaciones" isActive={pathname === "/dashboard/admin/rooms"} href="/dashboard/admin/rooms" />
-                    <SideBarItem name="Reservas" isActive={pathname === "/dashboard/admin/reservations"} href="/dashboard/admin/reservations" />
                 </SideBar>
             </section>
             
