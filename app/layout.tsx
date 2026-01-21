@@ -15,12 +15,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ERP Hotel - Login",
-  description: "ERP Hotel - Login",
+  title: "ERP Hotel",
+  description: "ERP Hotel",
 };
 
 export default async function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
