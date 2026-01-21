@@ -2,12 +2,13 @@
 import { logout } from "@/actions/auth";
 import { useThemeTransition } from "@/hooks/theme-hook";
 import { Switch } from "@/components/ui/switch"
+import Image from "next/image"
 
 export default function SideBar({ header, children }: { header: string; children: React.ReactNode }) {
     const { toggleTheme, isDark } = useThemeTransition();
 
     return (
-        <aside className="relative flex flex-col gap-2 h-screen  border-r-2 p-2 w-56
+        <aside className="relative flex flex-col gap-2 h-screen  border-r-2 p-6 w-64
             bg-zinc-100 border-zinc-200
             dark:bg-[#121212] dark:border-[#444444] justify-between
             ">
@@ -18,12 +19,14 @@ export default function SideBar({ header, children }: { header: string; children
                 dark:bg-[#242424] dark:border-[#444444]"
                 />
 
-                <section className="mx-4 my-6 w-full">
-                    <h1 className="text-3xl font-semibold">ERP Hotel</h1>
-                    <span className="text-xl font-semibold">{header} Panel</span>
+                <section className="mx-4 mt-6 mb-9 w-full flex row items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M5 21v-14l8 -4v18" /><path d="M19 21v-10l-6 -4" /><path d="M9 9l0 .01" /><path d="M9 12l0 .01" /><path d="M9 15l0 .01" /><path d="M9 18l0 .01" /></svg>
+                    <span className="text-sm font-semibold">{header} Panel</span>
                 </section>
 
-                <hr className="mx-4 mb-4 border-zinc-200 dark:border-[#444444]" />
+                <section className="mx-4 mt-6 mb-6 w-full flex row items-center gap-2">
+                    <span className="text-sm font-semibold text-zinc-600 dark:text-zinc-400">Menu</span>
+                </section>
 
                 <nav className="flex flex-col gap-4 justify-center w-full ">
                     {children}
