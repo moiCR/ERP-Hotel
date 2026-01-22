@@ -97,7 +97,7 @@ export default function UserModal({ onClose, roles, sedes }: UserModalProps) {
                                 ))}
                             </select>
                         </section>
-                        <button type="submit" className="mt-2 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold">Crear</button>
+                        <button type="submit" className="mt-2 p-2 bg-black dark:bg-white font-bold dark:text-black text-white rounded-lg hover:scale-105 transition-all duration-300">Crear</button>
                     </form>
                 </main>
             </div>

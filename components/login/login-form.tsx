@@ -90,8 +90,8 @@ export default function LoginForm() {
                     <button
                         id='login-button'
                         disabled={isLoading}
-                        className={`${isLoading ? 'bg-green-600 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-600'} 
-                                text-white p-3 rounded-xl transition-all duration-300 active:scale-95`}
+                        className={`${isLoading ? 'bg-black/80 dark:bg-white/80 text-white dark:text-black font-bold cursor-not-allowed' : 'cursor-pointer bg-black dark:bg-white text-white dark:text-black font-bold hover:scale-105 transition-all duration-300'} 
+                                p-3 rounded-xl transition-all duration-300 active:scale-95`}
                         type="submit">
                         {isLoading ? 'Iniciando sesión' : 'Iniciar sesión'}
                         {isLoading && <span className="loading-dots"></span>}
