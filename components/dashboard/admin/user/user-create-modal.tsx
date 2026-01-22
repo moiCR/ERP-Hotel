@@ -1,8 +1,8 @@
 "use client";
 
 import { createUser } from "@/actions/user"
+import { User } from "@/utils/interfaces";
 import { Rol, Sede } from "@prisma/client"
-import { useState } from "react";
 
 interface UserModalProps {
     onClose: () => void;
@@ -24,7 +24,7 @@ export default function UserModal({ onClose, roles, sedes }: UserModalProps) {
         const role = document.getElementById('role') as HTMLSelectElement;
         const sede = document.getElementById('sede') as HTMLSelectElement;
 
-        const user = {
+        const user : User = {
             name: name.value,
             lastName: lastName.value,
             email: email.value,

@@ -1,4 +1,4 @@
-import UserManagement from "@/components/dashboard/admin/user-managment";
+import UserManagement from "@/components/dashboard/admin/user/user-managment";
 
 
 export default function UsersPage() {
