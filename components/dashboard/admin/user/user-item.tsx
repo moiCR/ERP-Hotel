@@ -6,6 +6,7 @@ interface UserProps {
         nombre: string;
         apellidos: string;
         email: string;
+        estado: boolean;
         rol?: { nombre: string }; 
         sede?: { ciudad: string };
     }
@@ -40,6 +41,13 @@ export default function UserItem({ user }: UserProps) {
             <div className="flex flex-col gap-1 flex-1">
                 <span className="text-xs text-zinc-400 font-medium">EMAIL</span>
                 <span className="text-sm font-bold dark:text-gray-200 text-gray-700 truncate">{user.email}</span>
+            </div>
+
+            <div className="flex flex-col gap-1 w-24">
+                <span className="text-xs text-zinc-400 font-medium">ESTADO</span>
+                <span className={ user.estado === true ? 'text-green-500 text-sm font-bold truncate' : 'text-yellow-500 text-sm font-bold truncate'}>
+                    {user.estado ? "Activo" : "Inactivo"}
+                </span>
             </div>
 
             <div className="flex flex-col gap-1 w-24">

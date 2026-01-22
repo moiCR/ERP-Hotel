@@ -19,10 +19,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
             >
                 <div className="flex flex-col gap-4">
                     <button onClick={onClose} className="p-1 rounded-full self-end hover:bg-black/10 text-black dark:text-white/80 dark:hover:bg-white/10 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
-                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
                     </button>
                     <div className="flex items-center gap-4">
                         <span className="text-black dark:text-white/80 font-medium">Modo Oscuro</span>
