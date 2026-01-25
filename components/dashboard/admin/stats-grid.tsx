@@ -69,11 +69,11 @@ export async function StatsGrid() {
                                 {ultimasBitacoras.map((log) => (
                                     <tr key={log.id} className="border-b border-zinc-100 dark:border-zinc-800 last:border-0">
                                         <td className="px-3 py-2 font-medium truncate max-w-[150px]">
-                                            {log.usuario.nombre + " " + log.usuario.apellidos}
+                                            {log.usuario ? log.usuario.nombre + " " + log.usuario.apellidos : "Usuario Eliminado"}
                                         </td>
                                         <td className="px-3 py-2">
                                             <span className="bg-zinc-200 dark:bg-zinc-800 px-2 py-0.5 rounded text-xs">
-                                                {log.usuario.rol?.nombre || "N/A"}
+                                                {log.usuario?.rol?.nombre || "N/A"}
                                             </span>
                                         </td>
                                         <td className="px-3 py-2 text-right text-xs">

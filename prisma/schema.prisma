@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -62,8 +63,8 @@ model Usuario {
 
 model Bitacora {
   id           Int       @id @default(autoincrement())
-  usuario      Usuario   @relation(fields: [idUsuario], references: [id])
-  idUsuario    Int
+  usuario      Usuario?  @relation(fields: [idUsuario], references: [id], onDelete: SetNull)
+  idUsuario    Int?
   fechaIngreso DateTime  @default(now())
   fechaSalida  DateTime?
 }
@@ -97,8 +98,8 @@ model Cliente {
 
 model Reserva {
   id           Int        @id @default(autoincrement())
-  usuario      Usuario    @relation(fields: [idUsuario], references: [id])
-  idUsuario    Int
+  usuario      Usuario?   @relation(fields: [idUsuario], references: [id], onDelete: SetNull)
+  idUsuario    Int?
   habitacion   Habitacion @relation(fields: [idHabitacion], references: [id])
   idHabitacion Int
   cliente      Cliente    @relation(fields: [idCliente], references: [id])

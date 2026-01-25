@@ -29,3 +29,13 @@ export interface PartialUser {
     role?: string | number;
     sede?: string | number;
 }
+
+
+export interface SedeProps {
+    sede: {
+        id: number | string;
+        ciudad: string;
+        direccion: string;
+        central?: boolean;
+    }
+}

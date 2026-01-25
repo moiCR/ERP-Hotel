@@ -123,7 +123,7 @@ export async function updateUser(userData: PartialUser) {
 }
 
 
-export async function deleteUser(id: number) {
+export async function deleteUser(id : number) {
     if (!id) {
         return { success: false, error: "ID inválido" };
     }
