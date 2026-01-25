@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import LoginForm from "@/components/login/login-form";
-import SettingsButton from "@/components/login/settings-button";
-import SettingsModal from "@/components/login/settings-modal";
+import SettingsButton from "@/components/login/login-settings-button";
+import SettingsModal from "@/components/login/login-settings-modal";
 import LoginBackground from "@/components/login/login-background";
 
 export default function Home() {

@@ -91,8 +91,7 @@ export default function LoginForm() {
                         <button
                             id='login-button'
                             disabled={isLoading}
-                            className={`${isLoading ? 'bg-black/80 dark:bg-white/80 text-white dark:text-black font-bold cursor-not-allowed' : 'cursor-pointer bg-black dark:bg-white text-white dark:text-black font-bold hover:scale-105 transition-all duration-300'} 
-                                p-3 rounded-xl transition-all duration-300 active:scale-95`}
+                            className={"font-bold text-white dark:text-black bg-black dark:bg-white px-4 py-2 rounded-xl hover:scale-x-110 hover:scale-y-105 transition-all duration-300" + " " + (isLoading ? 'bg-black/80 dark:bg-white/80 text-white dark:text-black font-bold cursor-not-allowed' : 'cursor-pointer bg-black dark:bg-white text-white dark:text-black font-bold hover:scale-105 transition-all duration-300')}
                             type="submit">
                             {isLoading ? 'Iniciando sesión' : 'Iniciar sesión'}
                             {isLoading && <span className="loading-dots"></span>}

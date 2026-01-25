@@ -5,7 +5,7 @@ export interface UserProps {
         apellidos: string;
         email: string;
         estado?: boolean;
-        rol?: { id: number | string; nombre: string }; 
+        rol?: { id: number | string; nombre: string };
         sede?: { id: number | string; ciudad: string };
     }
 }
@@ -20,12 +20,12 @@ export interface User {
 }
 
 export interface PartialUser {
-    id? : number;
+    id?: number;
     name?: string;
-    lastName? : string;
-    email? : string;
-    password ?: string;
-    estado ? : boolean;
+    lastName?: string;
+    email?: string;
+    password?: string;
+    estado?: boolean;
     role?: string | number;
     sede?: string | number;
 }
@@ -33,7 +33,7 @@ export interface PartialUser {
 
 export interface SedeProps {
     sede: {
-        id: number | string;
+        id?: number | string;
         ciudad: string;
         direccion: string;
         central?: boolean;

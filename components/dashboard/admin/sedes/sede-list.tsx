@@ -2,21 +2,69 @@
 
 import { Sede } from "@prisma/client";
 import { SedeItem } from "./sede-item";
+import Button from "@/components/ui/button";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import SedeCreateModal from "./sede-create-modal";
+import { createSede } from "@/actions/sede";
+import { useRouter } from "next/navigation";
 
 interface SedeListProps {
     sedes: Sede[];
 }
 
 export function SedeList({ sedes }: SedeListProps) {
+    const router = useRouter();
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const canCreateCentral = !sedes.some(s => s.central);
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const sedeProps = {
+            sede: {
+                ciudad: formData.get("ciudad") as string,
+                direccion: formData.get("direccion") as string,
+                central: formData.get("central") === "on",
+            }
+        };
+        const res = await createSede(sedeProps);
+        if (res.success) {
+            router.refresh();
+            setShowCreateModal(false);
+            // toast.success(res.data); // Assuming toast exists, otherwise console.log or alert
+        } else {
+            console.error(res.error);
+            // toast.error(res.error);
+        }
+    }
+
     return (
         <div className="flex flex-col gap-6 w-full h-full">
             <header className="flex flex-row justify-between items-center">
                 <h1 className="text-3xl font-bold dark:text-white">Sedes</h1>
-                <section className="flex flex-row gap-4">
-                    <button className="flex flex-row gap-2 p-2 rounded-xl text-sm items-center font-semibold text-white dark:text-black bg-black dark:bg-white border-gray-300 dark:border-[#464646] hover:scale-105 transition duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                        Crear Sede
-                    </button>
+                <section className="flex flex-row gap-4 relative">
+                    {!showCreateModal && (
+                        <motion.div layoutId="create-sede-modal">
+                            <Button
+                                className="flex flex-row gap-2 items-center"
+                                onClick={() => setShowCreateModal(true)}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                                Crear Sede
+                            </Button>
+                        </motion.div>
+                    )}
+
+                    <AnimatePresence>
+                        {showCreateModal && (
+                            <SedeCreateModal
+                                onClose={() => setShowCreateModal(false)}
+                                canCreateCentral={canCreateCentral}
+                                onSubmit={handleSubmit}
+                            />
+                        )}
+                    </AnimatePresence>
                 </section>
             </header>
 
@@ -31,6 +79,7 @@ export function SedeList({ sedes }: SedeListProps) {
                     ))}
                 </div>
             </div>
+
         </div>
     );
 }
