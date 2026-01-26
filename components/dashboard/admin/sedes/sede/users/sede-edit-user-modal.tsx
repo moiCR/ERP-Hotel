@@ -24,17 +24,22 @@ export default function SedeEditUserModal({ userProps, onClose, onSubmit, roles,
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+                className="fixed inset-0 z-40"
             />
 
             <motion.div
-                layoutId="edit-user-modal"
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="absolute bottom-0 right-0 mb-4 mr-4 bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xl w-[400px] z-50 origin-bottom-right"
+                layoutId={`edit-user-modal-${userProps.user.id}`}
+                className="absolute bottom-0 right-0 mb-4 mr-4 bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xl w-[400px] z-50 overflow-hidden"
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <motion.form 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ delay: 0.1 }}
+                    onSubmit={handleSubmit} 
+                    className="flex flex-col gap-4"
+                >
                     <h2 className="text-xl font-bold dark:text-white">Editar Usuario</h2>
 
                     {isSelf && (
@@ -84,7 +89,7 @@ export default function SedeEditUserModal({ userProps, onClose, onSubmit, roles,
                             Guardar
                         </button>
                     </div>
-                </form>
+                </motion.form>
             </motion.div>
         </>
     );

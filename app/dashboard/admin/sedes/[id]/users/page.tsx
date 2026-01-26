@@ -1,4 +1,4 @@
-import SedeUserContent from "@/components/dashboard/admin/sedes/sede/sede-user-content";
+import SedeUserContent from "@/components/dashboard/admin/sedes/sede/users/sede-user-content";
 import { db } from "@/lib/db";
 import { getSession } from "@/actions/auth";
 

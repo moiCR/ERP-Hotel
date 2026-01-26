@@ -17,6 +17,7 @@ export function SedeList({ sedes }: SedeListProps) {
     const router = useRouter();
     const [showCreateModal, setShowCreateModal] = useState(false);
     const canCreateCentral = !sedes.some(s => s.central);
+    const [error, setError] = useState<string | null>(null);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -28,11 +29,15 @@ export function SedeList({ sedes }: SedeListProps) {
                 central: formData.get("central") === "on",
             }
         };
+
+        if (!sedeProps.sede.ciudad.trim() || !sedeProps.sede.direccion.trim()) {
+            return;
+        }
+
         const res = await createSede(sedeProps);
         if (res.success) {
             router.refresh();
             setShowCreateModal(false);
-            
         } else {
             console.error(res.error);;
         }

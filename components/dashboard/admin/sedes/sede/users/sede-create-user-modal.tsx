@@ -10,17 +10,22 @@ export default function SedeCreateUserModal({ onClose, onSubmit, roles }: SedeCr
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+                className="fixed inset-0 z-40"
             />
 
             <motion.div
                 layoutId="create-user-modal"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xl w-[400px] z-50 origin-top-right"
+                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xl w-[400px] z-50 overflow-hidden"
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-                <form onSubmit={onSubmit} className="flex flex-col gap-4">
+                <motion.form 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ delay: 0.1 }}
+                    onSubmit={onSubmit} 
+                    className="flex flex-col gap-4"
+                >
                     <h2 className="text-xl font-bold dark:text-white">Crear Usuario</h2>
 
                     <section className="flex flex-col gap-2">
@@ -68,7 +73,7 @@ export default function SedeCreateUserModal({ onClose, onSubmit, roles }: SedeCr
                             Crear
                         </button>
                     </div>
-                </form>
+                </motion.form>
             </motion.div>
         </>
     );

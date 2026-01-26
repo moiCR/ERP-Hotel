@@ -11,7 +11,7 @@ export default function SedeCreateModal({ onClose, canCreateCentral, onSubmit }:
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+                className="fixed inset-0 z-40"
             />
 
             <motion.div
@@ -26,12 +26,12 @@ export default function SedeCreateModal({ onClose, canCreateCentral, onSubmit }:
 
                     <section className="flex flex-col gap-2">
                         <label htmlFor="ciudad" className="text-sm font-medium dark:text-gray-200">Ciudad</label>
-                        <input type="text" name="ciudad" id="ciudad" className="p-2 border rounded-md dark:bg-zinc-800 dark:border-zinc-700 dark:text-white" />
+                        <input required type="text" name="ciudad" id="ciudad" className="p-2 border rounded-md dark:bg-zinc-800 dark:border-zinc-700 dark:text-white" />
                     </section>
 
                     <section className="flex flex-col gap-2">
                         <label htmlFor="direccion" className="text-sm font-medium dark:text-gray-200">Dirección</label>
-                        <input type="text" name="direccion" id="direccion" className="p-2 border rounded-md dark:bg-zinc-800 dark:border-zinc-700 dark:text-white" />
+                        <input required type="text" name="direccion" id="direccion" className="p-2 border rounded-md dark:bg-zinc-800 dark:border-zinc-700 dark:text-white" />
                     </section>
 
                     {canCreateCentral && (

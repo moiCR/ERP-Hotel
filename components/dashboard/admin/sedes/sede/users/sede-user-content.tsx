@@ -80,49 +80,42 @@ export default function SedeUserContent({ users, roles, idSede, sessionUserId }:
     }
 
     return (
-        <div className="flex flex-col gap-4">
-            <header className="flex flex-row justify-between items-center">
-                <h1 className="text-xl font-bold">Usuarios</h1>
-            </header>
-
-            <main className="flex flex-col gap-4">
-                <div className="flex flex-row justify-between">
-                    <input
-                        type="text"
-                        placeholder="Buscar"
-                        className="
-                            w-[350px] 
-                            bg-black dark:bg-white 
-                            text-white dark:text-black 
-                            border border-gray-300 
-                            p-2 rounded-xl
-                        "
-                    />
-
-                    {!showCreateModal && !showEditModal && (
-                        <motion.div layoutId="create-user-modal">
-                            <Button
-                                className="flex flex-row gap-2 items-center text-xs"
-                                onClick={() => setShowCreateModal(true)}
-                            >
-                                <PlusIcon />
-                                Crear Usuario
-                            </Button>
-                        </motion.div>
-                    )}
+        <div className="flex flex-col gap-4 h-full">
+            <main className="flex flex-col gap-4 h-full w-full">
+                
+                <div className="flex flex-row justify-between items-center">
+                    <h1 className="text-xl font-bold">Usuarios</h1>
+                    <motion.div layoutId="create-user-modal">
+                        <Button
+                            className="flex flex-row gap-2 items-center text-xs"
+                            onClick={() => setShowCreateModal(true)}
+                        >
+                            <PlusIcon />
+                            Crear Usuario
+                        </Button>
+                    </motion.div>
                 </div>
+                <hr className="w-full h-px bg-gray-200 dark:bg-gray-700" />
 
-                <hr />
+                <AnimatePresence>
+                    {showCreateModal && (
+                        <SedeCreateUserModal
+                            onClose={() => setShowCreateModal(false)}
+                            onSubmit={handleCreateSubmit}
+                            roles={roles}
+                        />
+                    )}
+                </AnimatePresence>
 
                 <div className="flex flex-col gap-4 relative">
+                    {users.length === 0 && (
+                        <div className="flex flex-col items-center justify-center text-center">
+                            <p className="text-center my-4 text-3xl font-bold text-gray-600 dark:text-gray-400">
+                                No hay usuarios
+                            </p>
+                        </div>
+                    )}
                     <AnimatePresence>
-                        {showCreateModal && (
-                            <SedeCreateUserModal
-                                onClose={() => setShowCreateModal(false)}
-                                onSubmit={handleCreateSubmit}
-                                roles={roles}
-                            />
-                        )}
                         {showEditModal && (
                             <SedeEditUserModal
                                 userProps={{ user: editingUser as unknown as UserProps['user'] }}
@@ -140,6 +133,7 @@ export default function SedeUserContent({ users, roles, idSede, sessionUserId }:
                             props={{ user }}
                             onEdit={(u) => { setEditingUser(u); setShowEditModal(true) }}
                             onDelete={handleDelete}
+                            isSelf={user.id === sessionUserId}
                         />
                     ))}
                 </div>

@@ -2,14 +2,15 @@
 import { EditIcon, TrashIcon } from "@/utils/icons";
 import { UserProps } from "@/utils/interfaces";
 import { Usuario } from "@prisma/client";
+import { motion } from "framer-motion";
 
-export default function SedeUserItem({ props, onEdit, onDelete }: { props: UserProps, onEdit: (user: Usuario) => void, onDelete: (user: Usuario) => void }) {
-    
+export default function SedeUserItem({ props, onEdit, onDelete, isSelf }: { props: UserProps, onEdit: (user: Usuario) => void, onDelete: (user: Usuario) => void, isSelf: boolean }) {
+
     return (
         <div className="flex flex-row gap-2 p-5 w-full h-[150px] bg-white/80 dark:bg-black/30 rounded-3xl justify-between items-center shadow-sm">
             <section className="flex flex-col gap-2">
-                <h1 className="text-xl font-bold text-gray-800 dark:text-white">
-                    {props.user.nombre} {props.user.apellidos}
+                <h1 className="text-xl font-bold items-center text-gray-800 dark:text-white">
+                    {props.user.nombre} {props.user.apellidos} {isSelf && <span className="text-xs text-center font-semibold rounded-full w-fit">(Tú)</span>}
                 </h1>
                 <h2 className="text-sm font-semibold text-gray-600 dark:text-gray-400">
                     {props.user.email}
@@ -20,12 +21,16 @@ export default function SedeUserItem({ props, onEdit, onDelete }: { props: UserP
             </section>
 
             <section className="flex flex-row gap-4">
-                <button
+                <motion.button
+                    layoutId={`edit-user-modal-${props.user.id}`}
                     onClick={() => onEdit(props.user as unknown as Usuario)}
-                    className="w-6 h-6 cursor-pointer transition-all duration-300 ease-in-out hover:scale-x-110 hover:scale-y-105 text-blue-500"
+                    className="w-6 h-6 cursor-pointer text-blue-500 bg-transparent z-10"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
                 >
                     <EditIcon />
-                </button>
+                </motion.button>
+                
                 <button
                     onClick={() => onDelete(props.user as unknown as Usuario)}
                     className="w-6 h-6 cursor-pointer transition-all duration-300 ease-in-out hover:scale-x-110 hover:scale-y-105 text-red-500"
