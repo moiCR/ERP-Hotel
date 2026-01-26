@@ -39,3 +39,26 @@ export interface SedeProps {
         central?: boolean;
     }
 }
+
+export interface SedeCreateModalProps {
+    onClose: () => void;
+    canCreateCentral: boolean;
+    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+}
+
+export interface SedeEditUserModalProps {
+    onClose: () => void;
+    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    userProps: UserProps;
+}
+
+export interface Role {
+    id: number | string;
+    nombre: string;
+}
+
+export interface SedeCreateUserModalProps {
+    onClose: () => void;
+    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    roles: Role[];
+}

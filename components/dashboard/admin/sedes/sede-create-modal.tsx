@@ -1,11 +1,7 @@
 
 
+import { SedeCreateModalProps } from "@/utils/interfaces";
 import { motion } from "framer-motion";
-interface SedeCreateModalProps {
-    onClose: () => void;
-    canCreateCentral: boolean;
-    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-}
 
 export default function SedeCreateModal({ onClose, canCreateCentral, onSubmit }: SedeCreateModalProps) {
     return (

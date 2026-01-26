@@ -32,10 +32,9 @@ export function SedeList({ sedes }: SedeListProps) {
         if (res.success) {
             router.refresh();
             setShowCreateModal(false);
-            // toast.success(res.data); // Assuming toast exists, otherwise console.log or alert
+            
         } else {
-            console.error(res.error);
-            // toast.error(res.error);
+            console.error(res.error);;
         }
     }
 
