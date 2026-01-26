@@ -5,9 +5,16 @@ import { notFound } from "next/navigation";
 
 export default async function SedeLayout({ children, params }: { children: React.ReactNode, params: { id: string } }) {
     const { id } = await params;
+
+    const idInt = parseInt(id);
+
+    if (isNaN(idInt)) {
+        return notFound();
+    }
+
     const sede = await db.sede.findUnique({
         where: {
-            id: parseInt(id)
+            id: idInt
         }
     });
 
