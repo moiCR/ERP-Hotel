@@ -34,10 +34,10 @@ export interface PartialUser {
 
 export interface SedeProps {
     sede: {
-        id?: number | string;
+        id?: number;
         ciudad: string;
         direccion: string;
-        central?: boolean;
+        central: boolean;
     }
 }
 

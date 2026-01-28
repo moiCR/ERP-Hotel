@@ -7,7 +7,11 @@ import { es } from "date-fns/locale";
 
 export async function StatsGrid() {
     const [totalUsuarios, totalSedes, ultimasBitacoras] = await Promise.all([
-        db.usuario.count(),
+        db.usuario.count({
+            where: {
+                isActive: true
+            }
+        }),
         db.sede.count(),
         db.bitacora.findMany({
             take: 7,

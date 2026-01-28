@@ -24,7 +24,6 @@ export default function SedeCreateUserModal({ onClose, onSubmit, roles }: SedeCr
         <Modal isOpen={true} onClose={onClose} layoutId="create-user-modal">
             <form onSubmit={handleSubmit}>
                 <ModalHeader title="Crear Usuario" onClose={onClose} />
-                
                 <ModalBody>
                     <section className="flex flex-col gap-2">
                         <label htmlFor="name" className="text-sm font-medium dark:text-gray-200">Nombre</label>

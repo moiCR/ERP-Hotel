@@ -9,8 +9,9 @@ import SedeEditUserModal from "./sede-edit-user-modal";
 import SedeCreateUserModal from "./sede-create-user-modal";
 import { AnimatePresence, motion } from "framer-motion";
 import { Role, UserProps } from "@/utils/interfaces";
-import { PlusIcon } from "@/utils/icons";
+import { PlusIcon, UserIcon } from "@/utils/icons";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "@/components/ui/modal";
+import SedeAddUserModal from "./sede-add-user-modal";
 
 interface SedeUserContentProps {
     users: (Usuario & { rol?: { id: number; nombre: string } })[];
@@ -22,11 +23,12 @@ interface SedeUserContentProps {
 export default function SedeUserContent({ users, roles, idSede, sessionUserId }: SedeUserContentProps) {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
     const [editingUser, setEditingUser] = useState<Usuario | null>(null);
-    
+
     const [userToDelete, setUserToDelete] = useState<Usuario | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
-    
+
     const router = useRouter();
 
     async function handleCreateSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -87,10 +89,10 @@ export default function SedeUserContent({ users, roles, idSede, sessionUserId }:
 
     async function confirmDelete() {
         if (!userToDelete) return;
-        
+
         setIsDeleting(true);
         const res = await deleteUser(userToDelete.id);
-        
+
         if (res.success) {
             console.log(`The user ${userToDelete.nombre} has been successfully deleted.`);
             router.refresh();
@@ -106,35 +108,51 @@ export default function SedeUserContent({ users, roles, idSede, sessionUserId }:
             <main className="flex flex-col gap-4 h-full w-full">
 
                 <div className="flex flex-row justify-between items-center">
-                    <h1 className="text-xl font-bold">Usuarios</h1>
-                    <motion.div layoutId="create-user-modal">
+                    <section className="flex flex-row gap-2">
+                        <UserIcon />
+                        <h1 className="text-xl font-bold">Usuarios</h1>
+                    </section>
+                    <section className="flex flex-row gap-2">
+                          <Button
+                                className="flex flex-row gap-2 items-center text-xs"
+                                onClick={() => setShowAddModal(true)}
+                                layoutId={showAddModal ? undefined : "add-user-modal"}
+                            >
+                                <PlusIcon />
+                                Agregar Usuario
+                            </Button>
                         <Button
-                            className="flex flex-row gap-2 items-center text-xs"
-                            onClick={() => setShowCreateModal(true)}
-                        >
-                            <PlusIcon />
-                            Crear Usuario
-                        </Button>
-                    </motion.div>
+                                className="flex flex-row gap-2 items-center text-xs"
+                                onClick={() => setShowCreateModal(true)}
+                                layoutId={showCreateModal ? undefined : "create-user-modal"}
+                            >
+                                <PlusIcon />
+                                Crear Usuario
+                            </Button>
+                    </section>
                 </div>
                 <hr className="w-full h-px bg-gray-200 dark:bg-gray-700" />
 
-                <Modal 
-                    isOpen={!!userToDelete} 
+                <AnimatePresence>
+                <Modal
+                    isOpen={!!userToDelete}
                     onClose={() => setUserToDelete(null)}
                     className="w-[400px]"
                 >
-                    <ModalHeader 
-                        title="Eliminar Usuario" 
-                        onClose={() => setUserToDelete(null)} 
+                    <ModalHeader
+                        title="Eliminar Usuario"
+                        onClose={() => setUserToDelete(null)}
                     />
                     <ModalBody>
-                        <p className="text-sm text-gray-600 dark:text-gray-300">
-                            ¿Estás seguro de que deseas eliminar al usuario <span className="font-bold text-black dark:text-white">{userToDelete?.nombre} {userToDelete?.apellidos}</span>? <br/>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 w-fit">
+                            ¿Estás seguro de que deseas eliminar al usuario <span className="font-bold text-black dark:text-white">{userToDelete?.nombre} {userToDelete?.apellidos}</span>?
+                        </p>
+
+                        <p className="text-sm text-gray-600 dark:text-gray-300 w-fit">
                             Esta acción no se puede deshacer.
                         </p>
                     </ModalBody>
-                    <ModalFooter 
+                    <ModalFooter
                         onCancel={() => setUserToDelete(null)}
                         onConfirm={confirmDelete}
                         confirmText="Eliminar"
@@ -143,7 +161,14 @@ export default function SedeUserContent({ users, roles, idSede, sessionUserId }:
                         confirmButtonType="button"
                     />
                 </Modal>
-
+                </AnimatePresence>
+                <AnimatePresence>
+                    {showAddModal && (
+                        <SedeAddUserModal
+                            onClose={() => setShowAddModal(false)}
+                        />
+                    )}
+                </AnimatePresence>
                 <AnimatePresence>
                     {showCreateModal && (
                         <SedeCreateUserModal

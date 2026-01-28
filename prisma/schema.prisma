@@ -13,34 +13,13 @@ model Sede {
   central   Boolean @default(false)
 
   usuarios     Usuario[]
-  modulos      Modulo[]
   habitaciones Habitacion[]
-}
-
-model Modulo {
-  id     Int    @id @default(autoincrement())
-  nombre String @unique
-  sede   Sede   @relation(fields: [idSede], references: [id])
-  idSede Int
-
-  permisos PermisoRol[]
 }
 
 model Rol {
   id       Int          @id @default(autoincrement())
   nombre   String       @unique
   usuarios Usuario[]
-  permisos PermisoRol[]
-}
-
-model PermisoRol {
-  id        Int     @id @default(autoincrement())
-  rol       Rol     @relation(fields: [idRol], references: [id])
-  idRol     Int
-  modulo    Modulo  @relation(fields: [idModulo], references: [id])
-  idModulo  Int
-  lectura   Boolean @default(false)
-  escritura Boolean @default(false)
 }
 
 model Usuario {
@@ -52,8 +31,8 @@ model Usuario {
   intentosFallidos      Int       @default(0)
   rol                   Rol       @relation(fields: [idRol], references: [id])
   idRol                 Int
-  sede                  Sede      @relation(fields: [idSede], references: [id])
-  idSede                Int
+  sede                  Sede?      @relation(fields: [idSede], references: [id])
+  idSede                Int?
   isActive              Boolean   @default(false)
   activationToken       String?   @unique
   activationTokenExpiry DateTime?

@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, X } from "lucide-react";
 import React, { useEffect } from "react";
-import { cn } from "@/lib/utils"; // Asumiendo que usas clsx/tailwind-merge, si no, usa template literals
+import { cn } from "@/lib/utils";
 import Button from "./button";
 
 interface ModalProps {
@@ -32,7 +32,7 @@ export function Modal({ isOpen, onClose, children, layoutId, className }: ModalP
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-40 bg-black/20 dark:bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
           />
 
           <motion.div
@@ -43,7 +43,7 @@ export function Modal({ isOpen, onClose, children, layoutId, className }: ModalP
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className={cn(
               "fixed z-50 bg-white dark:bg-zinc-900 shadow-xl rounded-xl overflow-hidden",
-              "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px]",
+              "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[400px] w-auto",
               className
             )}
           >
@@ -69,7 +69,7 @@ export function ModalHeader({ title, onClose }: { title: string; onClose?: () =>
 }
 
 export function ModalBody({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("px-6 py-4 flex flex-col gap-4", className)}>{children}</div>;
+  return <div className={cn("px-6 py-4 flex flex-col gap-4 w-auto", className)}>{children}</div>;
 }
 
 interface ModalFooterProps {
@@ -100,7 +100,8 @@ export function ModalFooter({
       <Button
         onClick={onCancel}
         disabled={isLoading}
-        className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-zinc-800 dark:text-gray-300 dark:hover:bg-zinc-700 disabled:opacity-50"
+        type="button"
+        className="px-4 py-2 text-sm font-medium text-gray-700 bg-black/50 rounded-lg hover:bg-gray-200 dark:bg-zinc-800 dark:text-gray-300 dark:hover:bg-zinc-700 disabled:opacity-50"
       >
         {cancelText}
       </Button>

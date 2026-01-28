@@ -1,5 +1,4 @@
 "use client";
-import { motion } from "framer-motion";
 import { Role, SedeEditUserModalProps } from "@/utils/interfaces";
 
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "@/components/ui/modal";

@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import SedeCreateModal from "./sede-create-modal";
 import { createSede } from "@/actions/sede";
 import { useRouter } from "next/navigation";
+import { PlusIcon } from "@/utils/icons";
 
 interface SedeListProps {
     sedes: Sede[];
@@ -17,7 +18,6 @@ export function SedeList({ sedes }: SedeListProps) {
     const router = useRouter();
     const [showCreateModal, setShowCreateModal] = useState(false);
     const canCreateCentral = !sedes.some(s => s.central);
-    const [error, setError] = useState<string | null>(null);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -48,17 +48,14 @@ export function SedeList({ sedes }: SedeListProps) {
             <header className="flex flex-row justify-between items-center">
                 <h1 className="text-3xl font-bold dark:text-white">Sedes</h1>
                 <section className="flex flex-row gap-4 relative">
-                    {!showCreateModal && (
-                        <motion.div layoutId="create-sede-modal">
-                            <Button
-                                className="flex flex-row gap-2 items-center"
-                                onClick={() => setShowCreateModal(true)}
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                                Crear Sede
-                            </Button>
-                        </motion.div>
-                    )}
+                    <Button
+                        className="flex flex-row gap-2 items-center"
+                        onClick={() => setShowCreateModal(true)}
+                        layoutId="create-sede-modal"
+                    >
+                        <PlusIcon />
+                        Crear Sede
+                    </Button>
 
                     <AnimatePresence>
                         {showCreateModal && (

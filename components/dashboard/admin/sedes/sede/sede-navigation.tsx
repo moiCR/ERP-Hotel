@@ -2,12 +2,16 @@
 "use client";
 import { TrashIcon } from "@/utils/icons";
 import { SedeProps } from "@/utils/interfaces";
+import { Sede } from "@prisma/client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import SedeDeleteModal from "./sede-delete-modal";
 
 export default function SedeNavigation({ props }: { props: SedeProps }) {
     const pathName = usePathname();
-
+    const [isDeleting, setIsDeleting] = useState(false);
+    
     return (
         <div className="flex flex-col p-4 gap-6 w-full rounded-3xl h-[150px] text-black dark:text-white bg-black dark:bg-white">
             <header className="flex flex-col mt-2 justify-center">
@@ -18,28 +22,34 @@ export default function SedeNavigation({ props }: { props: SedeProps }) {
                 <nav className="flex flex-row gap-4 w-full h-full items-center">
                     <SedeNavigationItem
                         name="Inicio"
-                        props={props}
                         href={`/dashboard/admin/sedes/${props.sede.id}`}
                         isActive={pathName === `/dashboard/admin/sedes/${props.sede.id}`}
                     />
                     <SedeNavigationItem
                         name="Usuarios"
-                        props={props}
                         href={`/dashboard/admin/sedes/${props.sede.id}/users`}
                         isActive={pathName === `/dashboard/admin/sedes/${props.sede.id}/users`}
                     />
 
                     <SedeNavigationItem
                         name="Habitaciones"
-                        props={props}
                         href={`/dashboard/admin/sedes/${props.sede.id}/rooms`}
                         isActive={pathName === `/dashboard/admin/sedes/${props.sede.id}/rooms`}
                     />
                 </nav>
-                <button className="
-                    p-2 text-red-600 hover:scale-y-105 hover:scale-x-101 transition-all duration-300 
-                    h-[30px] rounded-xl flex items-center justify-center
-                ">
+
+                {isDeleting && 
+                    <SedeDeleteModal
+                        onClose={() => setIsDeleting(false)}
+                        sedeToDelete={props.sede}
+                    />
+                }
+                <button 
+                    className="
+                        p-2 text-red-600 hover:scale-y-105 hover:scale-x-101 transition-all duration-300 
+                        h-[30px] rounded-xl flex items-center justify-center"
+                    onClick={() => setIsDeleting(true)}
+                >
                     <TrashIcon />
                 </button>
             </main>
@@ -48,7 +58,7 @@ export default function SedeNavigation({ props }: { props: SedeProps }) {
 }
 
 
-function SedeNavigationItem({ props, isActive, name, href }: { props: SedeProps, isActive: boolean, name: string, href: string }) {
+function SedeNavigationItem({isActive, name, href }: {  isActive: boolean, name: string, href: string }) {
 
     return (
         <Link className={`
