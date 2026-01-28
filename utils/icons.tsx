@@ -56,3 +56,22 @@ export const PlusIcon = () => {
         </svg>
     );
 }
+
+export const RoomIcon = () => {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" 
+            width="24" 
+            height="24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth="2" 
+            className="icon icon-tabler icons-tabler-outline icon-tabler-door"
+            viewBox="0 0 24 24"
+        >
+            <path fill="none" stroke="none" d="M0 0h24v24H0z"/>
+            <path d="M14 12v.01M3 21h18M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>
+        </svg>
+    );
+}

@@ -11,7 +11,7 @@ export default async function UsersPage({ params }: { params: Promise<{ id: stri
             idSede: parseInt(id)
         },
         include: {
-            rol: true
+            rol: true,
         }
     });
 

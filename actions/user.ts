@@ -5,34 +5,68 @@ import { PartialUser, User } from "@/utils/interfaces";
 import { Prisma } from '@prisma/client';
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
+import { sendActivationEmail } from "@/lib/email";
+import crypto from "crypto";
 
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET);
 
-export async function createUser(user: User) {
-    const hashedPassword = bcrypt.hashSync(user.password, 10);
+interface CreateUserProps {
+    name: string;
+    lastName: string;
+    email: string;
+    role: string | number;
+    sede: string | number;
+}
+
+export async function createUser(user: CreateUserProps) {
     try {
+        const existingUser = await db.usuario.findUnique({
+            where: { email: user.email }
+        });
+
+        if (existingUser) {
+            return { success: false, error: "El correo electrónico ya está registrado." };
+        }
+
+        const token = crypto.randomUUID();
+        const expiryDate = new Date();
+        expiryDate.setHours(expiryDate.getHours() + 24);
+
         await db.usuario.create({
             data: {
                 nombre: user.name,
                 apellidos: user.lastName,
                 email: user.email,
-                contrasena: hashedPassword,
+                activationToken: token,
+                activationTokenExpiry: expiryDate,
                 rol: {
                     connect: {
-                        id: parseInt(user.role)
+                        id: Number(user.role)
                     }
                 },
                 sede: {
                     connect: {
-                        id: parseInt(user.sede)
+                        id: Number(user.sede)
                     }
                 }
             }
-        })
+        });
 
-        return { success: true, data: "Usuario creado exitosamente" }
-    } catch {
-        return { success: false, error: "Error al crear el usuario" }
+        const emailSent = await sendActivationEmail(
+            user.email, 
+            token, 
+            `${user.name} ${user.lastName}`
+        );
+
+        if (!emailSent) {
+            return { success: false, error: "Usuario creado, pero falló el envío del correo." };
+        }
+
+        return { success: true, data: "Usuario invitado exitosamente. Se ha enviado el correo." };
+
+    } catch (err) {
+        console.error("Error en createUser:", err);
+        return { success: false, error: err };
     }
 }
 
@@ -81,9 +115,9 @@ export async function updateUser(userData: PartialUser) {
             dataToUpdate.email = userData.email;
         }
 
-        if (userData.estado !== undefined && userData.estado !== currentUser.estado) {
-            dataToUpdate.estado = userData.estado;
-            if (userData.estado === true && currentUser.estado === false) {
+        if (userData.isActive !== undefined && userData.isActive !== currentUser.isActive) {
+            dataToUpdate.isActive = userData.isActive;
+            if (userData.isActive === true && currentUser.isActive === false) {
                 dataToUpdate.intentosFallidos = 0;
             }
         }
@@ -154,5 +188,40 @@ export async function deleteUser(id : number) {
     } catch (err) {
         console.error("Error al eliminar usuario:", err);
         return { success: false, error: "Error al eliminar el usuario" };
+    }
+}
+
+
+export async function activateAccount(token: string, password: string) {
+    try {
+        const usuario = await db.usuario.findUnique({
+            where: { activationToken: token }
+        });
+
+        if (!usuario) {
+            return { success: false, message: "Token inválido o usuario no encontrado." };
+        }
+
+        if (usuario.activationTokenExpiry && new Date() > usuario.activationTokenExpiry) {
+            return { success: false, message: "El enlace de activación ha expirado." };
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await db.usuario.update({
+            where: { id: usuario.id },
+            data: {
+                contrasena: hashedPassword,
+                isActive: true,
+                activationToken: null,
+                activationTokenExpiry: null,
+            }
+        });
+
+        return { success: true, message: "Cuenta activada correctamente." };
+
+    } catch (error) {
+        console.error("Error activando cuenta:", error);
+        return { success: false, message: "Error interno del servidor." };
     }
 }

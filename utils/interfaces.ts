@@ -4,9 +4,10 @@ export interface UserProps {
         nombre: string;
         apellidos: string;
         email: string;
-        estado?: boolean;
+        isActive?: boolean;
         rol?: { id: number | string; nombre: string };
         sede?: { id: number | string; ciudad: string };
+        contrasena?: string | null;
     }
 }
 
@@ -25,7 +26,7 @@ export interface PartialUser {
     lastName?: string;
     email?: string;
     password?: string;
-    estado?: boolean;
+    isActive?: boolean;
     role?: string | number;
     sede?: string | number;
 }

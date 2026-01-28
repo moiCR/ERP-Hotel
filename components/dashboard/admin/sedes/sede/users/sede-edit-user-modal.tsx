@@ -2,6 +2,9 @@
 import { motion } from "framer-motion";
 import { Role, SedeEditUserModalProps } from "@/utils/interfaces";
 
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "@/components/ui/modal";
+import { useState } from "react";
+
 interface ExtendedEditModalProps extends SedeEditUserModalProps {
     roles: Role[];
     sessionUserId: number;
@@ -10,38 +13,34 @@ interface ExtendedEditModalProps extends SedeEditUserModalProps {
 export default function SedeEditUserModal({ userProps, onClose, onSubmit, roles, sessionUserId }: ExtendedEditModalProps) {
 
     const isSelf = sessionUserId === Number(userProps.user.id);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         if (isSelf) return;
         console.log("The user update process has been initiated.");
-        onSubmit(e);
+        setIsSubmitting(true);
+        try {
+            await onSubmit(e);
+            console.log("The user has been successfully updated.");
+        } catch (error) {
+            console.error("Error updating user:", error);
+        } finally {
+            setIsSubmitting(false);
+            onClose();
+        }
     };
 
     return (
         <>
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={onClose}
-                className="fixed inset-0 z-40"
-            />
-
-            <motion.div
+            <Modal
+                isOpen={true}
+                onClose={onClose}
                 layoutId={`edit-user-modal-${userProps.user.id}`}
-                className="absolute bottom-0 right-0 mb-4 mr-4 bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-xl w-[400px] z-50 overflow-hidden"
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-                <motion.form 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ delay: 0.1 }}
-                    onSubmit={handleSubmit} 
-                    className="flex flex-col gap-4"
-                >
-                    <h2 className="text-xl font-bold dark:text-white">Editar Usuario</h2>
-
+                <form onSubmit={handleSubmit}>
+                    <ModalHeader title="Editar Usuario" onClose={onClose} />
+                    <ModalBody>
                     {isSelf && (
                         <p className="text-xs text-red-500 font-medium">No puedes editar tu propio perfil desde aquí.</p>
                     )}
@@ -71,26 +70,15 @@ export default function SedeEditUserModal({ userProps, onClose, onSubmit, roles,
                             ))}
                         </select>
                     </section>
-
-                    <div className="flex justify-end gap-2 mt-4">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-zinc-800 dark:text-gray-300 dark:hover:bg-zinc-700"
-                        >
-                            Cancelar
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={isSelf}
-                            title={isSelf ? "No puedes editar tu propio perfil" : ""}
-                            className="px-4 py-2 text-sm font-bold text-white bg-black rounded-lg hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200 disabled:bg-gray-400 dark:disabled:bg-zinc-700 dark:disabled:text-gray-500"
-                        >
-                            Guardar
-                        </button>
-                    </div>
-                </motion.form>
-            </motion.div>
+                    </ModalBody>
+                    <ModalFooter 
+                        onCancel={onClose} 
+                        isLoading={isSubmitting} 
+                        confirmText="Actualizar"
+                        isDisabled={isSelf}
+                    />
+                </form>
+            </Modal>
         </>
     );
 }

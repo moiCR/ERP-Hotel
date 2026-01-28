@@ -3,7 +3,12 @@ import * as bcrypt from "bcryptjs";
 
 async function main() {
     const salt = await bcrypt.genSalt(10);
-    const hashedAdminPassword = await bcrypt.hash("admin123", salt)
+
+    if (!process.env.ADMIN_PASSWORD) {
+        throw new Error("ADMIN_PASSWORD environment variable is not set");
+    }
+
+    const hashedAdminPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD!.toString(), salt)
 
     const adminRole = await db.rol.upsert({
         where: { nombre: "Administrador" },
@@ -23,11 +28,15 @@ async function main() {
         create: {
             nombre: "Admin",
             apellidos: "Sistema",
-            estado: true,
             contrasena: hashedAdminPassword,
             idRol: adminRole.id,
             idSede: sedeCentral.id,
             email: "admin@admin.com",
+            isActive: true,
+            activationToken: null,
+            activationTokenExpiry: null,
+            createdAt: new Date(),
+            updatedAt: new Date(),
         },
     });
 

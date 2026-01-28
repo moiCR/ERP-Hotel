@@ -19,10 +19,13 @@ export async function auth(email: string, password: string, remember: boolean) {
         if (!usuario) {
             return { success: false, message: "El usuario no existe" };
         }
+        
+        if (!usuario.isActive) {
+            return { success: false, message: "Este usuario no está activo" };
+        }
 
-
-        if (!usuario.estado) {
-            return { success: false, message: "Este usuario está inhabilitado" };
+        if (!usuario.contrasena) {
+            return { success: false, message: "Este usuario no tiene contraseña" };
         }
 
         if (!bcrypt.compareSync(password, usuario.contrasena)) {
@@ -30,7 +33,7 @@ export async function auth(email: string, password: string, remember: boolean) {
                 await db.usuario.update({
                     where: { id: usuario.id },
                     data: {
-                        estado: false
+                        isActive: false
                     }
                 });
                 return { success: false, message: "Este usuario ha sido bloqueado por seguridad. Contacte a un administrador." };
@@ -58,8 +61,7 @@ export async function auth(email: string, password: string, remember: boolean) {
             .sign(SECRET_KEY);
 
         const cookieStore = await cookies();
-
-
+        
         if (remember) {
             cookieStore.set("session", token, {
                 httpOnly: true,
@@ -125,3 +127,5 @@ export async function logout() {
     cookieStore.delete("session");
     redirect("/");
 }
+
+

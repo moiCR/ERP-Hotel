@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -45,18 +44,22 @@ model PermisoRol {
 }
 
 model Usuario {
-  id               Int     @id @default(autoincrement())
-  nombre           String
-  email            String  @unique
-  apellidos        String
-  estado           Boolean @default(true)
-  contrasena       String // Encriptada
-  intentosFallidos Int     @default(0)
-  rol              Rol     @relation(fields: [idRol], references: [id])
-  idRol            Int
-  sede             Sede    @relation(fields: [idSede], references: [id])
-  idSede           Int
+  id                    Int       @id @default(autoincrement())
+  nombre                String
+  email                 String    @unique
+  apellidos             String
+  contrasena            String?
+  intentosFallidos      Int       @default(0)
+  rol                   Rol       @relation(fields: [idRol], references: [id])
+  idRol                 Int
+  sede                  Sede      @relation(fields: [idSede], references: [id])
+  idSede                Int
+  isActive              Boolean   @default(false)
+  activationToken       String?   @unique
+  activationTokenExpiry DateTime?
 
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @default(now()) @updatedAt
   bitacoras          Bitacora[]
   reservasRealizadas Reserva[]
 }

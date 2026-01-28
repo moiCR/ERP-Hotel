@@ -25,11 +25,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const theme = cookieStore.get("theme")?.value || "dark";
+  const theme = cookieStore.get("theme")?.value || "system";
   return (
     <html lang="es" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-screen h-screen`}
       >
         <ThemeProvider
           attribute="class"
