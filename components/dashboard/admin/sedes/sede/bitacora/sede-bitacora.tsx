@@ -12,7 +12,7 @@ type BitacoraConDetalles = Prisma.BitacoraGetPayload<{
   }
 }>;
 
-export default function SedeMainContent({ bitacoras }: { bitacoras: BitacoraConDetalles[] }) {
+export default function SedeLogBookContent({ bitacoras }: { bitacoras: BitacoraConDetalles[] }) {
     return (
         <div>
             <h1 className="mb-4 text-xl font-bold">Bitácora de accesos</h1>

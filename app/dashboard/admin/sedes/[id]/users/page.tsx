@@ -15,9 +15,27 @@ export default async function UsersPage({ params }: { params: Promise<{ id: stri
         }
     });
 
+    const usersNotInSede = await db.usuario.findMany({
+        where: {
+            OR: [
+                { idSede: null },
+                {
+                    AND: [
+                        { idSede: { not: null } },
+                        { idSede: { not: parseInt(id) } }
+                    ]
+                }
+            ]
+        },
+        include: {
+            rol: true,
+            sede: true,
+        }
+    });
+
     const roles = await db.rol.findMany();
 
     return (
-        <SedeUserContent users={users} roles={roles} idSede={parseInt(id)} sessionUserId={session?.id as number} />
+        <SedeUserContent users={users} usersNotInSede={usersNotInSede} roles={roles} idSede={parseInt(id)} sessionUserId={session?.id as number} />
     );
 }

@@ -37,10 +37,15 @@ export function Modal({ isOpen, onClose, children, layoutId, className }: ModalP
 
           <motion.div
             layoutId={layoutId}
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            initial={{ scale: 0.9, opacity: 0, transition: { duration: 0.5 } }}
+            animate={{ scale: 1, opacity: 1, transition: { duration: 0.5 } }}
+            exit={{ scale: 0.9, opacity: 0, transition: { duration: 0.5 } }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 25,
+              mass: 1
+            }}
             className={cn(
               "fixed z-50 bg-white dark:bg-zinc-900 shadow-xl rounded-xl overflow-hidden",
               "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[400px] w-auto",
@@ -105,7 +110,7 @@ export function ModalFooter({
       >
         {cancelText}
       </Button>
-      
+
       {showConfirm && (
         <Button
           type={confirmButtonType}
@@ -113,7 +118,7 @@ export function ModalFooter({
           disabled={isLoading || isDisabled}
           className={cn(
             "px-4 py-2 text-sm font-bold text-white rounded-lg flex items-center gap-2",
-            isDanger 
+            isDanger
               ? "bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
               : "bg-black hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200",
             "disabled:opacity-50 disabled:cursor-not-allowed"

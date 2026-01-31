@@ -34,7 +34,7 @@ export interface PartialUser {
 
 export interface SedeProps {
     sede: {
-        id?: number;
+        id: number;
         ciudad: string;
         direccion: string;
         central: boolean;

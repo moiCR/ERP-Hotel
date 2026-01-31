@@ -15,12 +15,13 @@ import SedeAddUserModal from "./sede-add-user-modal";
 
 interface SedeUserContentProps {
     users: (Usuario & { rol?: { id: number; nombre: string } })[];
+    usersNotInSede: (Usuario & { rol?: { id: number; nombre: string } })[];
     roles: Role[];
     idSede: number;
     sessionUserId: number;
 }
 
-export default function SedeUserContent({ users, roles, idSede, sessionUserId }: SedeUserContentProps) {
+export default function SedeUserContent({ users, usersNotInSede, roles, idSede, sessionUserId }: SedeUserContentProps) {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -166,6 +167,8 @@ export default function SedeUserContent({ users, roles, idSede, sessionUserId }:
                     {showAddModal && (
                         <SedeAddUserModal
                             onClose={() => setShowAddModal(false)}
+                            usersNotInSede={usersNotInSede}
+                            id={idSede}
                         />
                     )}
                 </AnimatePresence>

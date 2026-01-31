@@ -5,9 +5,8 @@ export default async function SedesPage() {
     const sedes = await db.sede.findMany();
 
     return (
-        <div className="h-full w-full gap-4 flex flex-rowº">
+        <div className="h-full w-full gap-4 flex flex-row">
             <SedeList sedes={sedes} />
-            
         </div>
     );
 }

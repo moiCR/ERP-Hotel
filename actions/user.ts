@@ -84,12 +84,6 @@ export async function updateUser(userData: PartialUser) {
     }
 
     try {
-        const { payload } = await jwtVerify(token, SECRET_KEY);
-        const sessionUserId = payload.id as number;
-
-        if (sessionUserId === userData.id) {
-            return { success: false, error: "No puedes editarte a ti mismo" };
-        }
 
         const currentUser = await db.usuario.findUnique({
             where: { id: userData.id }

@@ -13,15 +13,21 @@ export default function Button({ children, layoutId, className, ...props }: Butt
             {layoutId && (
                 <motion.div
                     layoutId={layoutId}
-                    className="absolute inset-0 z-0 dark:bg-white/20 bg-black/30 rounded-xl"
+                    transition={{
+                        type: "spring",
+                        stiffness: 180,
+                        damping: 22,
+                        mass: 0.8
+                    }}
+                    className="absolute inset-0 z-0 backdrop-blur-3xl bg-transparent dark:bg-transparent rounded-xl"
                 />
             )}
 
-            <button 
+            <button
                 className={cn(
-                    "relative z-10 font-bold text-white dark:text-black bg-black dark:bg-white px-4 py-2 rounded-xl transition-transform hover:scale-105 active:scale-95", 
+                    "relative z-10 font-bold text-white dark:text-black bg-black dark:bg-white px-4 py-2 rounded-xl transition-transform hover:scale-x-105 hover:scale-y-95 active:scale-95",
                     className
-                )} 
+                )}
                 {...props}
             >
                 {children}
