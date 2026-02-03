@@ -1,6 +1,11 @@
+"use client";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Prisma } from "@prisma/client";
+import Button from "@/components/ui/button";
+import { DownloadIcon } from "lucide-react";
+import SedeBitacoraExportModal from "./sede-bitacora-export-modal";
+import { useState } from "react";
 
 type BitacoraConDetalles = Prisma.BitacoraGetPayload<{
   include: {
@@ -13,9 +18,27 @@ type BitacoraConDetalles = Prisma.BitacoraGetPayload<{
 }>;
 
 export default function SedeLogBookContent({ bitacoras }: { bitacoras: BitacoraConDetalles[] }) {
-    return (
-        <div>
-            <h1 className="mb-4 text-xl font-bold">Bitácora de accesos</h1>
+    const [open, setOpen] = useState(false);
+return (
+        <div className="flex flex-col gap-4">
+            <header className="flex flex-row justify-between items-center">
+                <h1 className="mb-4 text-xl font-bold">Bitácora de accesos</h1>
+                
+                <div className="relative">
+                    <Button 
+                        layoutId="export-logbook" 
+                        onClick={() => setOpen(true)} 
+                        className="flex flex-row gap-2 items-center bg-black dark:bg-white text-white dark:text-black px-4 py-2 rounded-xl"
+                    >
+                        <DownloadIcon size={18} />
+                        Exportar
+                    </Button>
+
+                    <SedeBitacoraExportModal open={open} onClose={() => setOpen(false)} data={bitacoras} />
+                </div>
+            </header>
+
+            
             <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left text-zinc-600 dark:text-zinc-300">
                     <thead className="text-xs uppercase bg-black/5 dark:bg-white/5 rounded-lg">

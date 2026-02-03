@@ -1,10 +1,14 @@
-
-
-import { SedeCreateModalProps } from "@/utils/interfaces";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "@/components/ui/modal";
 import { useState } from "react";
 
-export default function SedeCreateModal({ onClose, canCreateCentral, onSubmit }: SedeCreateModalProps) {
+interface SedeCreateModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    canCreateCentral: boolean;
+    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+}
+
+export default function SedeCreateModal({ isOpen, onClose, canCreateCentral, onSubmit }: SedeCreateModalProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -12,7 +16,6 @@ export default function SedeCreateModal({ onClose, canCreateCentral, onSubmit }:
         setIsSubmitting(true);
         try {
             await onSubmit(e);
-            console.log("The user has been successfully created.");
         } catch (error) {
             console.error("Error creating user:", error);
         } finally {
@@ -22,9 +25,10 @@ export default function SedeCreateModal({ onClose, canCreateCentral, onSubmit }:
     return (
         <>
             <Modal
-                isOpen={true}
+                isOpen={isOpen}
                 onClose={() => onClose?.()}
                 layoutId="create-sede-modal"
+                className="absolute right-0 top-0 left-auto bottom-auto translate-x-0 translate-y-0 z-50"
             >
                 <ModalHeader
                     title="Crear Sede"

@@ -117,7 +117,7 @@ export default function SedeUserContent({ users, usersNotInSede, roles, idSede, 
                           <Button
                                 className="flex flex-row gap-2 items-center text-xs"
                                 onClick={() => setShowAddModal(true)}
-                                layoutId={showAddModal ? undefined : "add-user-modal"}
+                                layoutId={"add-user-modal"}
                             >
                                 <PlusIcon />
                                 Agregar Usuario
@@ -125,16 +125,14 @@ export default function SedeUserContent({ users, usersNotInSede, roles, idSede, 
                         <Button
                                 className="flex flex-row gap-2 items-center text-xs"
                                 onClick={() => setShowCreateModal(true)}
-                                layoutId={showCreateModal ? undefined : "create-user-modal"}
+                                layoutId={"create-user-modal"}
                             >
                                 <PlusIcon />
                                 Crear Usuario
                             </Button>
                     </section>
-                </div>
-                <hr className="w-full h-px bg-gray-200 dark:bg-gray-700" />
 
-                <AnimatePresence>
+                                    <AnimatePresence>
                 <Modal
                     isOpen={!!userToDelete}
                     onClose={() => setUserToDelete(null)}
@@ -181,7 +179,8 @@ export default function SedeUserContent({ users, usersNotInSede, roles, idSede, 
                         />
                     )}
                 </AnimatePresence>
-
+                </div>
+                <hr className="w-full h-px bg-gray-200 dark:bg-gray-700" />
                 <div className="flex flex-col gap-4 relative">
                     {users.length <= 0 && (
                         <div className="flex flex-1 items-center justify-center py-20">

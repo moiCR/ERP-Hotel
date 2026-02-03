@@ -1,84 +1,150 @@
-"use client"
-import { logout } from "@/actions/auth";
-import { useThemeTransition } from "@/hooks/theme-hook";
-import { Switch } from "@/components/ui/switch"
-import Image from "next/image"
+"use client";
 
-export default function SideBar({ header, children }: { header: string; children: React.ReactNode }) {
-    const { toggleTheme, isDark } = useThemeTransition();
+import { useState, createContext } from "react";
+import LogoutModal from "./logout-modal";
+import Button from "./ui/button";
+import { ModalTheme } from "./theme-modal";
+import { BrushIcon, DoorOpenIcon, UserIcon } from "lucide-react";
 
-    return (
-        <aside className="relative flex flex-col gap-2 h-screen  border-r-2 p-6 w-64
+export const SidebarContext = createContext({ isClosed: false });
+
+export default function SideBar({
+  header,
+  children,
+}: {
+  header: string;
+  children: React.ReactNode;
+}) {
+  const [isClosed, setIsClosed] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
+
+  return (
+    <SidebarContext.Provider value={{ isClosed }}>
+      <aside
+        className={`relative flex flex-col gap-2 h-screen border-r-2 p-4 transition-all duration-300
             bg-zinc-100 border-zinc-200
             dark:bg-[#121212] dark:border-[#444444] justify-between
-            ">
-
-            <div className="flex flex-col">
-                <div className="absolute inset-y-0 left-0 right-0 rounded-r-3xl -z-10 border-r-2
+            ${isClosed ? "w-20" : "w-64"}`}
+      >
+        <div className="flex flex-col overflow-hidden">
+          <div
+            className="absolute inset-y-0 left-0 right-0 rounded-r-3xl -z-10 border-r-2
                 bg-zinc-100 border-zinc-200
                 dark:bg-[#242424] dark:border-[#444444]"
-                />
+          />
 
-                <section className="mx-4 mt-6 mb-9 w-full flex row items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-building-skyscraper"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M5 21v-14l8 -4v18" /><path d="M19 21v-10l-6 -4" /><path d="M9 9l0 .01" /><path d="M9 12l0 .01" /><path d="M9 15l0 .01" /><path d="M9 18l0 .01" /></svg>
-                    <span className="text-sm font-semibold">{header} Panel</span>
-                </section>
+          <section
+            className={`flex flex-row items-center mb-4 ${isClosed ? "justify-center" : "justify-end"}`}
+          >
+            <button
+              onClick={() => setIsClosed(!isClosed)}
+              className="hover:scale-110 transition-transform"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={`transition-transform duration-300 ${isClosed ? "rotate-180" : ""}`}
+              >
+                <path d="M4 12l10 0" />
+                <path d="M4 12l4 4" />
+                <path d="M4 12l4 -4" />
+                <path d="M20 4l0 16" />
+              </svg>
+            </button>
+          </section>
 
-                <section className="mx-4 mt-6 mb-6 w-full flex row items-center gap-2">
-                    <span className="text-sm font-semibold text-zinc-600 dark:text-zinc-400">Menu</span>
-                </section>
-
-                <nav className="flex flex-col gap-4 justify-center w-full ">
-                    {children}
-                </nav>
-
-                <div className="absolute right-0 top-0 w-8 h-8 pointer-events-none translate-x-full">
-                    <div className="absolute inset-0 bg-zinc-100 dark:bg-[#121212]" />
-                    <div className="absolute inset-0 rounded-tl-3xl border-l-2 
-                    bg-zinc-50 border-zinc-200
-                    dark:bg-[#121212] dark:border-[#444444] " />
-                </div>
-
-                <div className="absolute right-0 bottom-0 w-8 h-8 pointer-events-none translate-x-full">
-                    <div className="absolute inset-0 bg-zinc-100 dark:bg-[#121212]" />
-                    <div className="absolute inset-0 rounded-bl-3xl border-l-2
-                    bg-zinc-50 border-zinc-200
-                    dark:bg-[#121212] dark:border-[#444444]" />
-                </div>
+          <section className="mx-2 mt-4 mb-9 flex items-center gap-3 md:justify-center">
+            <div className="min-w-[24px]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="icon-tabler-building-skyscraper"
+              >
+                <path d="M3 21l18 0" />
+                <path d="M5 21v-14l8 -4v18" />
+                <path d="M19 21v-10l-6 -4" />
+              </svg>
             </div>
+            {!isClosed && (
+              <span className="text-sm font-bold truncate">{header} Panel</span>
+            )}
+          </section>
 
-            <footer className="my-6 w-full p-4 flex flex-row justify-between items-center">
-                <button className="p-1 hover:scale-105 rounded-full hover:bg-black/10 text-black dark:text-white/80 dark:hover:bg-white/10 transition-all duration-300"
-                    onClick={() => logout()}>
-                    <LogoutIcon />
-                </button>
+          {!isClosed && (
+            <section className="mx-2 mb-4">
+              <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+                Menu
+              </span>
+            </section>
+          )}
 
+          <nav className="flex flex-col gap-2 w-full">{children}</nav>
+        </div>
 
-                    <div className="flex flex-row justify-around items-center gap-2">
-                        <MoonIcon />
-                        <Switch
-                            checked={isDark}
-                            onClick={(e) => toggleTheme(e)}
-                            className="bg-zinc-800 dark:bg-zinc-200"
-                        />
-                    </div>
-            </footer>
-        </aside>
-    )
+        <footer
+          className={`my-6 w-full flex flex-col gap-4 items-center ${isClosed ? "px-0" : "px-2"}`}
+        >
+          <div className="relative">
+            <ModalTheme
+              isOpen={isThemeModalOpen}
+              className="absolute top-auto bottom-0 left-0 right-auto translate-x-0 translate-y-0"
+              onClose={() => setIsThemeModalOpen(false)}
+            />
+
+            <Button
+              layoutId="theme-modal"
+              className="p-2 w-full flex justify-center items-center rounded-xl bg-transparent dark:bg-transparent dark:text-white hover:text-red-500 hover:bg-red-500/10 hover:dark:text-red-500 hover:dark:bg-red-500/10 text-black transition-all duration-300"
+              onClick={() => setIsThemeModalOpen(true)}
+            >
+              <BrushIcon />
+
+              {!isClosed && (
+                <span className="ml-2 text-sm font-medium">Tema</span>
+              )}
+            </Button>
+          </div>
+
+          <div>
+            <Button className="p-2 w-full flex justify-center items-center rounded-xl bg-transparent dark:bg-transparent dark:text-white hover:text-red-500 hover:bg-red-500/10 hover:dark:text-red-500 hover:dark:bg-red-500/10 text-black transition-all duration-300">
+              <UserIcon />
+              {!isClosed && (
+                <span className="ml-2 text-sm font-medium">Cuenta</span>
+              )}
+            </Button>
+          </div>
+
+          <div className="relative">
+            <LogoutModal
+              isOpen={isLogoutModalOpen}
+              onClose={() => setIsLogoutModalOpen(false)}
+            />
+
+            <Button
+              layoutId="logout-modal"
+              className="p-2 w-full flex justify-center items-center rounded-xl bg-transparent dark:bg-transparent dark:text-white hover:text-red-500 hover:bg-red-500/10 hover:dark:text-red-500 hover:dark:bg-red-500/10 text-black transition-all duration-300"
+              onClick={() => setIsLogoutModalOpen(true)}
+            >
+              <DoorOpenIcon />
+              {!isClosed && (
+                <span className="ml-2 text-sm font-medium">Cerrar Sesión</span>
+              )}
+            </Button>
+          </div>
+        </footer>
+      </aside>
+    </SidebarContext.Provider>
+  );
 }
-
-
-function LogoutIcon() {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="icon icon-tabler icons-tabler-outline icon-tabler-logout"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>
-    )
-}
-
-function MoonIcon() {
-    return (
-        <>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="icon icon-tabler icons-tabler-filled icon-tabler-moon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z" /><path d="M12 1.992a10 10 0 1 0 9.236 13.838c.341-.82-.476-1.644-1.298-1.31a6.5 6.5 0 0 1-6.864-10.787l.077-.08c.551-.63.113-1.653-.758-1.653h-.266l-.068-.006z" /></svg>
-        </>
-    )
-}
-

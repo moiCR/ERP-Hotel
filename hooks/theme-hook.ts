@@ -10,8 +10,10 @@ export function useThemeTransition() {
 
     const isDark = resolvedTheme === "dark";
 
-    const toggleTheme = useCallback(async (e: React.MouseEvent) => {
-        const newTheme = isDark ? "light" : "dark";
+    const setThemeTransition = useCallback(async (newTheme: "dark" | "light", e: React.MouseEvent) => {
+        if (resolvedTheme === newTheme) return;
+
+        const isNewThemeDark = newTheme === "dark";
 
         if (!document.startViewTransition) {
             await changeTheme(newTheme);
@@ -42,21 +44,27 @@ export function useThemeTransition() {
 
             document.documentElement.animate(
                 {
-                    clipPath: isDark ? [...clipPath].reverse() : clipPath,
+                    clipPath: isNewThemeDark ? [...clipPath].reverse() : clipPath,
                 },
                 {
                     duration: 500,
                     easing: "ease-in-out",
-                    pseudoElement: isDark
+                    pseudoElement: isNewThemeDark
                         ? "::view-transition-old(root)"
                         : "::view-transition-new(root)",
                 }
             );
         });
-    }, [isDark, setTheme]);
+    }, [resolvedTheme, setTheme]);
+
+    const toggleTheme = useCallback(async (e: React.MouseEvent) => {
+       const newTheme = isDark ? "light" : "dark";
+       setThemeTransition(newTheme, e);
+    }, [isDark, setThemeTransition]);
 
     return {
         toggleTheme,
+        setTheme: setThemeTransition,
         isDark,
         mounted: true
     };

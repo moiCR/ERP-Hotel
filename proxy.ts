@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+
 import type { NextRequest } from 'next/server';
 import { jwtVerify } from "jose";
 
@@ -22,25 +23,34 @@ export async function proxy(request: NextRequest) {
     try {
         const { payload } = await jwtVerify(session, SECRET_KEY);
         const userRole = payload.rol as string;
+
+        if (pathname === "/dashboard/user/configuration") {
+            return NextResponse.next();
+        }
         
-        if (pathname === "/" || pathname.startsWith("/activate")) {
+        if (pathname === "/" || pathname === "/dashboard" || pathname.startsWith("/activate")) {
             const dashboardPath = userRole === "Administrador" ? "/dashboard/admin" : "/dashboard"; 
+            
+            if (pathname === dashboardPath) {
+                return NextResponse.next();
+            }
             return NextResponse.redirect(new URL(dashboardPath, request.url));
         }
-        if (pathname.startsWith("/dashboard/admin") && userRole !== "Administrador") {
+
+        if (pathname === "/dashboard/user/configuration") {
             return NextResponse.redirect(new URL("/dashboard", request.url));
         }
 
         return NextResponse.next();
 
     } catch (error) {
+        console.error("The session is invalid or has expired.");
         const response = NextResponse.redirect(new URL("/", request.url));
         response.cookies.delete("session");
         return response;
     }
 }
 
-// Configuración del Matcher
 export const config = {
     matcher: [
         '/((?!api|_next/static|_next/image|favicon.ico).*)',

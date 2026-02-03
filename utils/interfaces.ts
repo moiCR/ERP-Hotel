@@ -41,12 +41,6 @@ export interface SedeProps {
     }
 }
 
-export interface SedeCreateModalProps {
-    onClose: () => void;
-    canCreateCentral: boolean;
-    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-}
-
 export interface SedeEditUserModalProps {
     onClose: () => void;
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
