@@ -1,58 +1,64 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-import type { NextRequest } from 'next/server';
+import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function proxy(request: NextRequest) {
-    const { pathname } = request.nextUrl;
-    const session = request.cookies.get("session")?.value;
+  const { pathname } = request.nextUrl;
+  const session = request.cookies.get("session")?.value;
 
-    if (pathname.startsWith("/_next") || pathname.includes("/api/") || pathname.includes("favicon.ico")) {
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.includes("/api/") ||
+    pathname.includes("favicon.ico")
+  ) {
+    return NextResponse.next();
+  }
+
+  if (!session) {
+    if (pathname === "/" || pathname.startsWith("/activate")) {
+      return NextResponse.next();
+    }
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  try {
+    const { payload } = await jwtVerify(session, SECRET_KEY);
+    const userRole = payload.rol as string;
+
+    if (pathname === "/dashboard/user/configuration") {
+      return NextResponse.next();
+    }
+
+    if (
+      pathname === "/" ||
+      pathname === "/dashboard" ||
+      pathname.startsWith("/activate")
+    ) {
+      const dashboardPath =
+        userRole === "Administrador" ? "/dashboard/admin" : "/dashboard";
+
+      if (pathname === dashboardPath) {
         return NextResponse.next();
+      }
+      return NextResponse.redirect(new URL(dashboardPath, request.url));
     }
 
-    if (!session) {
-        if (pathname === "/" || pathname.startsWith("/activate")) {
-            return NextResponse.next();
-        }
-        return NextResponse.redirect(new URL("/", request.url));
+    if (pathname === "/dashboard/user/configuration") {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
-    try {
-        const { payload } = await jwtVerify(session, SECRET_KEY);
-        const userRole = payload.rol as string;
-
-        if (pathname === "/dashboard/user/configuration") {
-            return NextResponse.next();
-        }
-        
-        if (pathname === "/" || pathname === "/dashboard" || pathname.startsWith("/activate")) {
-            const dashboardPath = userRole === "Administrador" ? "/dashboard/admin" : "/dashboard"; 
-            
-            if (pathname === dashboardPath) {
-                return NextResponse.next();
-            }
-            return NextResponse.redirect(new URL(dashboardPath, request.url));
-        }
-
-        if (pathname === "/dashboard/user/configuration") {
-            return NextResponse.redirect(new URL("/dashboard", request.url));
-        }
-
-        return NextResponse.next();
-
-    } catch (error) {
-        console.error("The session is invalid or has expired.");
-        const response = NextResponse.redirect(new URL("/", request.url));
-        response.cookies.delete("session");
-        return response;
-    }
+    return NextResponse.next();
+  } catch (error) {
+    console.error("The session is invalid or has expired." + error);
+    const response = NextResponse.redirect(new URL("/", request.url));
+    response.cookies.delete("session");
+    return response;
+  }
 }
 
 export const config = {
-    matcher: [
-        '/((?!api|_next/static|_next/image|favicon.ico).*)',
-    ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
