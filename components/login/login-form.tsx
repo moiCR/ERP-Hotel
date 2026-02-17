@@ -2,8 +2,8 @@
 import { auth } from "@/actions/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2Icon, LoaderCircleIcon } from "lucide-react";
 import Button from "../ui/button";
+import { sileo } from "sileo";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -20,20 +20,36 @@ export default function LoginForm() {
 
     setLoading(true);
     setError("");
-
-    try {
-      const result = await auth(email, password, remember);
-      if (result.success && result.targetPath) {
-        router.push(result.targetPath);
-      } else {
-        setLoading(false);
-        setError(result.message || "Credenciales inválidas");
-      }
-    } catch (err) {
+    
+    const promise = await sileo.promise(auth(email, password, remember), {
+      loading: { title: "Iniciando Sesión..." },
+      success: { title: "Sesión iniciada correctamente" },
+      error: {
+        title: "Inicio de sesión fallido",
+        description: "Por favor, verifica tus credenciales e intenta nuevamente."
+      },
+    }).catch((err) => {
       setLoading(false);
-      setError("Ocurrió un error inesperado.");
-      console.error(err);
-    }
+      setError(err.message);
+    });
+    
+  
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    router.push(promise.targetPath!);
+
+    // try {
+    //   const result = await auth(email, password, remember);
+    //   if (result.success && result.targetPath) {
+    //     router.push(result.targetPath);
+    //   } else {
+    //     setLoading(false);
+    //     setError(result.message || "Credenciales inválidas");
+    //   }
+    // } catch (err) {
+    //   setLoading(false);
+    //   setError("Ocurrió un error inesperado.");
+    //   console.error(err);
+    // }
   };
 
   return (
@@ -124,10 +140,7 @@ export default function LoginForm() {
               }
               type="submit"
             >
-              <div className="flex flex-row items-center gap-2">
-                {isLoading && <LoaderCircleIcon className="animate-spin" />}
-                {!isLoading && "Iniciar sesión"}
-              </div>
+              Iniciar sesión
             </Button>
             {error && (
               <p className="text-red-500 text-sm text-center mt-2">{error}</p>

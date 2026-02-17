@@ -4,11 +4,11 @@ import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import { jwtVerify, SignJWT } from "jose";
 import { redirect } from "next/navigation";
+import { th } from "date-fns/locale";
 
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET || "tu_clave_secreta_super_segura");
 
 export async function auth(email: string, password: string, remember: boolean) {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
     let targetPath = "/dashboard/";
     try {
         const usuario = await db.usuario.findUnique({
@@ -17,15 +17,15 @@ export async function auth(email: string, password: string, remember: boolean) {
         });
 
         if (!usuario) {
-            return { success: false, message: "El usuario no existe" };
+            throw new Error("La contraseña o el usuario es incorrecto.");
         }
         
         if (!usuario.isActive) {
-            return { success: false, message: "Este usuario no está activo" };
+            throw new Error("Este usuario no está activo");
         }
 
         if (!usuario.contrasena) {
-            return { success: false, message: "Este usuario no tiene contraseña" };
+            throw new Error("Este usuario aun no está activo.");
         }
 
         if (!bcrypt.compareSync(password, usuario.contrasena)) {
@@ -36,7 +36,7 @@ export async function auth(email: string, password: string, remember: boolean) {
                         isActive: false
                     }
                 });
-                return { success: false, message: "Este usuario ha sido bloqueado por seguridad. Contacte a un administrador." };
+                throw new Error("Este usuario ha sido bloqueado por seguridad. Contacte a un administrador.");
             }
 
             await db.usuario.update({
@@ -45,7 +45,8 @@ export async function auth(email: string, password: string, remember: boolean) {
                     intentosFallidos: usuario.intentosFallidos + 1
                 }
             });
-            return { success: false, message: "La contraseña o el usuario es incorrecto." };
+          
+            throw new Error("La contraseña o el usuario es incorrecto.");
         }
 
         const expirationTime = remember ? "30d" : "2h";
@@ -92,8 +93,6 @@ export async function auth(email: string, password: string, remember: boolean) {
         }
 
         return {
-            success: true,
-            message: "The process has been successfully completed.",
             user: {
                 nombre: usuario.nombre,
                 rol: usuario.rol.nombre
@@ -104,7 +103,7 @@ export async function auth(email: string, password: string, remember: boolean) {
 
     } catch (error) {
         console.error("Error en el login:", error);
-        return { success: false, message: "Error interno del servidor" };
+        throw new Error("La contraseña o el usuario es incorrecto.");
     }
 }
 

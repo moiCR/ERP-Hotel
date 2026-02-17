@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cookies } from "next/headers";
+import { sileo, Toaster } from "sileo";
+import { th } from "date-fns/locale";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -31,6 +33,16 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased w-screen h-screen`}
       >
+        <Toaster
+          position="top-center"
+          options={{
+            fill: theme === "dark" ? "#fff" : "#000",
+            duration: 3000,
+            styles: {
+              description: theme === "dark" ? "#fff" : "#000",
+            },
+          }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme={theme}

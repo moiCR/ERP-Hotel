@@ -2,9 +2,16 @@
 
 import { useState } from "react";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "@/components/ui/modal";
-import { SedeCreateUserModalProps } from "@/utils/interfaces";
+import { Role } from "@/utils/interfaces";
 
-export default function SedeCreateUserModal({ onClose, onSubmit, roles }: SedeCreateUserModalProps) {
+interface SedeCreateUserModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+    roles: Role[];
+}
+
+export default function SedeCreateUserModal({ isOpen, onClose, onSubmit, roles }: SedeCreateUserModalProps) {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,7 +28,7 @@ export default function SedeCreateUserModal({ onClose, onSubmit, roles }: SedeCr
     };
 
     return (
-        <Modal isOpen={true} onClose={onClose} layoutId="create-user-modal">
+        <Modal isOpen={isOpen} onClose={onClose} layoutId="create-user-modal">
             <form onSubmit={handleSubmit}>
                 <ModalHeader title="Crear Usuario" onClose={onClose} />
                 <ModalBody>

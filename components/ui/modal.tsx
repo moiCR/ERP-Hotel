@@ -14,7 +14,13 @@ interface ModalProps {
   className?: string;
 }
 
-export function Modal({ isOpen, onClose, children, layoutId, className }: ModalProps) {
+export function Modal({
+  isOpen,
+  onClose,
+  children,
+  layoutId,
+  className,
+}: ModalProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -44,12 +50,12 @@ export function Modal({ isOpen, onClose, children, layoutId, className }: ModalP
               type: "spring",
               stiffness: 300,
               damping: 25,
-              mass: 1
+              mass: 1,
             }}
             className={cn(
               "fixed z-50 bg-white dark:bg-zinc-900 shadow-xl rounded-xl overflow-hidden",
               "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-[400px] w-auto",
-              className
+              className,
             )}
           >
             {children}
@@ -60,12 +66,22 @@ export function Modal({ isOpen, onClose, children, layoutId, className }: ModalP
   );
 }
 
-export function ModalHeader({ title, onClose }: { title: string; onClose?: () => void }) {
+export function ModalHeader({
+  title,
+  onClose,
+}: {
+  title: string;
+  onClose?: () => void;
+}) {
   return (
     <div className="flex items-center justify-between px-6 pt-6 pb-2">
       <h2 className="text-xl font-bold dark:text-white">{title}</h2>
       {onClose && (
-        <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+        <button
+          type="button"
+          onClick={onClose}
+          className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+        >
           <X size={20} />
         </button>
       )}
@@ -73,8 +89,18 @@ export function ModalHeader({ title, onClose }: { title: string; onClose?: () =>
   );
 }
 
-export function ModalBody({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("px-6 py-4 flex flex-col gap-4 w-auto", className)}>{children}</div>;
+export function ModalBody({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cn("px-6 py-4 flex flex-col gap-4 w-auto", className)}>
+      {children}
+    </div>
+  );
 }
 
 interface ModalFooterProps {
@@ -121,7 +147,7 @@ export function ModalFooter({
             isDanger
               ? "bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
               : "bg-black hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200",
-            "disabled:opacity-50 disabled:cursor-not-allowed"
+            "disabled:opacity-50 disabled:cursor-not-allowed",
           )}
         >
           {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}

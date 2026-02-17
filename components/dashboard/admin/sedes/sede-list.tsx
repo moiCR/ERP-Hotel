@@ -8,8 +8,7 @@ import SedeCreateModal from "./sede-create-modal";
 import { createSede } from "@/actions/sede";
 import { useRouter } from "next/navigation";
 import { PlusIcon } from "@/utils/icons";
-import { Notification } from "@/components/ui/notification";
-import { AnimatePresence } from "framer-motion";
+import { sileo } from "sileo";
 
 interface SedeListProps {
   sedes: Sede[];
@@ -18,9 +17,7 @@ interface SedeListProps {
 export function SedeList({ sedes }: SedeListProps) {
   const router = useRouter();
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [notification, setNotification] = useState(false);
   const canCreateCentral = !sedes.some((s) => s.central);
-
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -35,16 +32,15 @@ export function SedeList({ sedes }: SedeListProps) {
     if (!sedeProps.sede.ciudad.trim() || !sedeProps.sede.direccion.trim()) {
       return;
     }
-
-    const res = await createSede(sedeProps);
-    if (res.success) {
-      setNotification(true);
-      setTimeout(() => setNotification(false), 3000);
-      router.refresh();
-      setShowCreateModal(false);
-    } else {
-      console.error(res.error);
-    }
+    
+    
+    setShowCreateModal(false);
+    sileo.promise(createSede(sedeProps), {
+      loading : {title: "Creando sede..."},
+      success : {title: "Sede creada exitosamente"},
+      error : {title: "Error al crear sede"}
+    });
+    
   }
 
   return (
@@ -61,11 +57,7 @@ export function SedeList({ sedes }: SedeListProps) {
             Crear Sede
           </Button>
 
-          <AnimatePresence>
-            {notification && (
-              <Notification message="Sede creada exitosamente" />
-            )}
-          </AnimatePresence>
+         
 
           <SedeCreateModal
             isOpen={showCreateModal}

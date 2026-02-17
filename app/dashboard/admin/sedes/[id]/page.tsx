@@ -1,6 +1,7 @@
 import SedeEditContent from "@/components/dashboard/admin/sedes/sede/sede-edit-content";
 import SedeStats from "@/components/dashboard/admin/sedes/sede/sede-stats";
 import { db } from "@/lib/db";
+import { Suspense } from "react";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -34,9 +35,9 @@ export default async function SedePage({ params }: PageProps) {
 
 
     return (
-        <div className="h-full w-full">
-            <SedeStats totalHabitaciones={totalHabitaciones} totalUsuarios={totalUsuarios} />
-            <SedeEditContent {...sede} />
-        </div>
+      <Suspense fallback={<div>Cargando...</div>}>
+        <SedeStats totalHabitaciones={totalHabitaciones} totalUsuarios={totalUsuarios} />
+        <SedeEditContent {...sede} />
+      </Suspense>
     );
 }
